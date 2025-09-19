@@ -34,68 +34,48 @@ Changes to the documentation are typically deployed via CI/CD when merged to the
 
 ## Documentation Structure
 
-The documentation is organized into the following sections:
+### Phase 1: Core Documentation (17 pages)
+
+The documentation is organized into sections that guide users from installation through agent development:
 
 ```
-📚 Documentation
-├── 🚀 Getting Started (5 pages)
-│   ├── index.mdx - Welcome to AgentSystems
-│   ├── quickstart.mdx - 5-Minute Quick Start
-│   ├── concepts.mdx - Understanding AgentSystems
-│   ├── installation.mdx - Installation & Setup
-│   └── next-steps.mdx - What's Next?
+docs/
+├── 🚀 Getting Started (4 pages)
+│   ├── index.mdx                 # Welcome to AgentSystems
+│   ├── installation.mdx           # System Requirements & Setup
+│   ├── quickstart.mdx             # 5-Minute Quick Start
+│   └── architecture.mdx           # How Components Work Together
 │
-├── ⚙️ Configuration (6 pages)
-│   ├── index.mdx - Configuration Overview
-│   ├── credentials.mdx - API Keys & Credentials
-│   ├── models.mdx - AI Model Connections
-│   ├── registries.mdx - Container Registries
-│   ├── agents.mdx - Agent Deployments
-│   └── egress-control.mdx - Network Access Control
+├── ⚙️ Configuration (5 pages) - Critical for using agents beyond hello-world
+│   ├── index.mdx                  # Configuration Overview & Dependency Chain
+│   ├── credentials.mdx            # Step 1: API Keys & Environment Variables
+│   ├── model-connections.mdx      # Step 2: AI Provider Connections
+│   ├── registry-connections.mdx   # Step 3: Container Registries
+│   └── agents.mdx                 # Step 4: Agent Deployment
 │
-├── 📖 User Guide (11 pages)
-│   ├── running-agents.mdx - Running Agents
-│   ├── working-with-files.mdx - Files & Artifacts
-│   ├── agent-hub.mdx - Agent Hub & Marketplace
-│   ├── programmatic-access.mdx - CLI & API Usage
-│   ├── monitoring/
-│   │   ├── executions.mdx - Execution History
-│   │   ├── audit-logs.mdx - Audit Trail
-│   │   └── troubleshooting.mdx - Debugging Issues
-│   ├── advanced/
-│   │   ├── authentication.mdx - Bearer Tokens
-│   │   └── ui-customization.mdx - Themes & UI Features
-│   └── reference/
-│       └── cli-commands.mdx - CLI Reference
+├── 📖 User Guide (5 pages)
+│   ├── cli-commands.mdx           # SDK Command Reference
+│   ├── running-agents.mdx         # Execute Agents Step-by-Step
+│   ├── working-with-files.mdx     # Artifacts & File I/O
+│   ├── audit-logs.mdx             # Cryptographic Audit Trail
+│   └── agent-hub.mdx              # Finding & Installing Agents
 │
-├── 🛠️ Build Agents (11 pages)
-│   ├── index.mdx - Building for AgentSystems
-│   ├── quickstart.mdx - Your First Agent
-│   ├── development/
-│   │   ├── agent-contract.mdx - Required Endpoints
-│   │   ├── local-development.mdx - Dev Environment
-│   │   └── testing.mdx - Testing Your Agent
-│   ├── capabilities/
-│   │   ├── using-models.mdx - AI Model Access
-│   │   ├── progress-tracking.mdx - Progress Updates
-│   │   ├── file-handling.mdx - Processing Files
-│   │   └── workflows.mdx - LangGraph & Multi-step
-│   ├── distribution/
-│   │   ├── packaging.mdx - Docker & Versioning
-│   │   └── publishing.mdx - Share Your Agent
-│   └── examples/
-│       ├── hello-world.mdx - Minimal Agent
-│       ├── file-processor.mdx - File Processing
-│       └── production-agent.mdx - Production Example
-│
-└── 📋 API Reference (3-4 pages)
-    ├── index.mdx - API Overview
-    ├── gateway-api.mdx - Gateway Endpoints
-    ├── agent-api.mdx - Agent Contract
-    └── openapi.json - OpenAPI Specification
+└── 🛠️ Build Agents (3 pages)
+    ├── quickstart.mdx             # Your First Agent in 10 Minutes
+    ├── agent-contract.mdx         # Required Endpoints (/invoke, /health)
+    └── using-toolkit.mdx          # Model Access & Progress Tracking
 ```
 
-**Total: ~32 pages** organized for progressive learning and easy navigation.
+**Phase 1 Total: 17 essential pages** covering everything users need to get started, configure, and build agents.
+
+### Future Phases
+
+Additional documentation will be added as the platform matures:
+- API Reference with OpenAPI specifications
+- Advanced topics (authentication, UI customization)
+- Additional examples and tutorials
+- Platform administration guides
+- Troubleshooting and debugging
 
 ## Contributing
 
