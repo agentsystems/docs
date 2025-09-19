@@ -45,13 +45,12 @@ The documentation is organized into the following sections:
 │   ├── installation.mdx - Installation & Setup
 │   └── next-steps.mdx - What's Next?
 │
-├── ⚙️ Configuration (6 pages)
+├── ⚙️ Configuration (5 pages)
 │   ├── index.mdx - Configuration Overview
 │   ├── credentials.mdx - API Keys & Credentials
 │   ├── models.mdx - AI Model Connections
 │   ├── registries.mdx - Container Registries
-│   ├── agents.mdx - Agent Deployments
-│   └── egress-control.mdx - Network Access Control
+│   └── agents.mdx - Agent Deployments
 │
 ├── 📖 User Guide (11 pages)
 │   ├── running-agents.mdx - Running Agents

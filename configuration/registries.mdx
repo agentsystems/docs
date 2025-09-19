@@ -50,10 +50,10 @@ graph LR
 
       <Step title="Configure in agentsystems-config.yml">
         ```yaml
-        registries:
+        registry_connections:
           dockerhub:
-            url: "https://registry-1.docker.io"
-            type: "dockerhub"
+            url: "docker.io"
+            enabled: true
             auth:
               method: "basic"
               username_env: "DOCKERHUB_USERNAME"
@@ -78,10 +78,10 @@ graph LR
 
       <Step title="Configure in agentsystems-config.yml">
         ```yaml
-        registries:
+        registry_connections:
           ghcr:
-            url: "https://ghcr.io"
-            type: "ghcr"
+            url: "ghcr.io"
+            enabled: true
             auth:
               method: "basic"
               username_env: "GITHUB_USERNAME"
@@ -104,10 +104,10 @@ graph LR
 
       <Step title="Configure in agentsystems-config.yml">
         ```yaml
-        registries:
+        registry_connections:
           ecr:
             url: "123456789012.dkr.ecr.us-east-1.amazonaws.com"
-            type: "ecr"
+            enabled: true
             auth:
               method: "aws"
               region: "us-east-1"
@@ -141,16 +141,14 @@ graph LR
 
       <Step title="Configure in agentsystems-config.yml">
         ```yaml
-        registries:
+        registry_connections:
           private:
-            url: "https://registry.company.com"
-            type: "generic"
+            url: "registry.company.com"
+            enabled: true
             auth:
               method: "basic"
               username_env: "PRIVATE_REGISTRY_USERNAME"
               password_env: "PRIVATE_REGISTRY_PASSWORD"
-            # Optional: for self-signed certificates
-            insecure_skip_verify: false
         ```
       </Step>
     </Steps>
@@ -162,32 +160,24 @@ graph LR
 ### Registry Configuration Structure
 
 ```yaml
-registries:
+registry_connections:
   <registry-name>:
     # Registry URL (required)
-    url: "https://registry.example.com"
+    url: "registry.example.com"
 
-    # Registry type (required)
-    type: "dockerhub" | "ghcr" | "ecr" | "generic"
+    # Enable/disable this connection
+    enabled: true
 
     # Authentication configuration (optional for public registries)
     auth:
-      method: "none" | "basic" | "aws" | "token"
+      method: "none" | "basic" | "aws"
 
       # For basic auth
       username_env: "ENV_VAR_NAME"
       password_env: "ENV_VAR_NAME"
 
-      # For token auth
-      token_env: "ENV_VAR_NAME"
-
       # For AWS ECR
       region: "us-east-1"
-
-    # Optional settings
-    insecure_skip_verify: false  # Skip TLS verification
-    pull_timeout: "300s"         # Image pull timeout
-    max_pull_attempts: 3          # Retry attempts
 ```
 
 ### Multiple Registry Configuration
@@ -195,16 +185,18 @@ registries:
 You can configure multiple registries simultaneously:
 
 ```yaml
-registries:
+registry_connections:
   # Public Docker Hub (no auth needed)
-  dockerhub-public:
-    url: "https://registry-1.docker.io"
-    type: "dockerhub"
+  dockerhub_public:
+    url: "docker.io"
+    enabled: true
+    auth:
+      method: "none"
 
   # Private Docker Hub
-  dockerhub-private:
-    url: "https://registry-1.docker.io"
-    type: "dockerhub"
+  dockerhub_private:
+    url: "docker.io"
+    enabled: true
     auth:
       method: "basic"
       username_env: "DOCKERHUB_USERNAME"
@@ -212,8 +204,8 @@ registries:
 
   # GitHub Container Registry
   ghcr:
-    url: "https://ghcr.io"
-    type: "ghcr"
+    url: "ghcr.io"
+    enabled: true
     auth:
       method: "basic"
       username_env: "GITHUB_USERNAME"
@@ -221,8 +213,8 @@ registries:
 
   # Company private registry
   internal:
-    url: "https://registry.internal.company.com"
-    type: "generic"
+    url: "registry.internal.company.com"
+    enabled: true
     auth:
       method: "basic"
       username_env: "INTERNAL_REGISTRY_USER"
@@ -318,14 +310,11 @@ Verify your registry configuration:
 <Tabs>
   <Tab title="Using CLI">
     ```bash
-    # Test pulling an image
-    agentsystems test-registry dockerhub nginx:latest
+    # Check platform status (includes registry connections)
+    agentsystems status
 
-    # Test authentication
-    agentsystems test-registry ghcr ghcr.io/owner/private-image:latest
-
-    # View registry status
-    agentsystems status registries
+    # View logs to check for registry errors
+    agentsystems logs gateway
     ```
   </Tab>
 
@@ -397,7 +386,6 @@ Verify your registry configuration:
 
     **Solutions:**
     - ECR tokens expire after 12 hours
-    - AgentSystems automatically refreshes tokens
     - Verify AWS credentials are valid
     - Check IAM permissions include `ecr:GetAuthorizationToken`
     - Restart gateway if token refresh fails
