@@ -1,0 +1,80 @@
+---
+title: Building for AgentSystems
+description: Create custom AI agents for the platform
+---
+
+# Building Agents
+
+Learn how to create custom AI agents for the AgentSystems platform.
+
+## Why Build Agents?
+
+- **Custom Logic**: Implement domain-specific functionality
+- **Integration**: Connect to your systems and APIs
+- **Sharing**: Distribute agents to the community
+- **Monetization**: Sell specialized agents (coming soon)
+
+## Agent Architecture
+
+Every agent is:
+- A **Docker container** with a FastAPI server
+- Implements **3 required endpoints**: `/invoke`, `/health`, `/metadata`
+- Receives a **thread ID** for tracking
+- Can access **configured AI models** via the platform
+
+## Quick Example
+
+```python
+from fastapi import FastAPI, Header
+from pydantic import BaseModel
+from agentsystems_toolkit import get_model
+
+app = FastAPI()
+
+class InvokeRequest(BaseModel):
+    prompt: str
+
+@app.post("/invoke")
+async def invoke(
+    request: InvokeRequest,
+    x_thread_id: str = Header(alias="X-Thread-Id")
+):
+    # Get configured model
+    llm = get_model("gpt-4")
+
+    # Process request
+    result = llm.invoke(request.prompt)
+
+    return {
+        "thread_id": x_thread_id,
+        "result": result
+    }
+
+@app.get("/health")
+async def health():
+    return {"status": "healthy"}
+
+@app.get("/metadata")
+async def metadata():
+    return {
+        "name": "my-agent",
+        "version": "1.0.0"
+    }
+```
+
+## Get Started
+
+<Steps>
+  <Step title="Use the Template">
+    Clone the agent template repository
+  </Step>
+  <Step title="Develop Your Agent">
+    Implement your custom logic
+  </Step>
+  <Step title="Test Locally">
+    Run and debug your agent
+  </Step>
+  <Step title="Package & Deploy">
+    Build and publish your container
+  </Step>
+</Steps>

@@ -1,68 +1,144 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "AgentSystems",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
+    "primary": "#00b6a0",
+    "light": "#47a1d9",
     "dark": "#15803D"
   },
   "favicon": "/favicon.svg",
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Getting Started",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Welcome",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
-            ]
-          },
-          {
-            "group": "Customization",
-            "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "getting-started/index",
+              "getting-started/quickstart",
+              "getting-started/concepts",
+              "getting-started/installation",
+              "getting-started/next-steps"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "Configuration",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Setup",
             "pages": [
-              "api-reference/introduction"
+              "configuration/index",
+              "configuration/credentials",
+              "configuration/models",
+              "configuration/registries",
+              "configuration/agents",
+              "configuration/egress-control"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "User Guide",
+        "groups": [
+          {
+            "group": "Using AgentSystems",
+            "pages": [
+              "user-guide/running-agents",
+              "user-guide/working-with-files",
+              "user-guide/agent-hub",
+              "user-guide/programmatic-access"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Monitoring",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "user-guide/monitoring/executions",
+              "user-guide/monitoring/audit-logs",
+              "user-guide/monitoring/troubleshooting"
+            ]
+          },
+          {
+            "group": "Advanced",
+            "pages": [
+              "user-guide/advanced/authentication",
+              "user-guide/advanced/ui-customization"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
+              "user-guide/reference/cli-commands"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Build Agents",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "build-agents/index",
+              "build-agents/quickstart"
+            ]
+          },
+          {
+            "group": "Development",
+            "pages": [
+              "build-agents/development/agent-contract",
+              "build-agents/development/local-development",
+              "build-agents/development/testing"
+            ]
+          },
+          {
+            "group": "Capabilities",
+            "pages": [
+              "build-agents/capabilities/using-models",
+              "build-agents/capabilities/progress-tracking",
+              "build-agents/capabilities/file-handling",
+              "build-agents/capabilities/workflows"
+            ]
+          },
+          {
+            "group": "Distribution",
+            "pages": [
+              "build-agents/distribution/packaging",
+              "build-agents/distribution/publishing"
+            ]
+          },
+          {
+            "group": "Examples",
+            "pages": [
+              "build-agents/examples/hello-world",
+              "build-agents/examples/file-processor",
+              "build-agents/examples/production-agent"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API Reference",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "api-reference/index"
+            ]
+          },
+          {
+            "group": "Gateway API",
+            "pages": [
+              "api-reference/gateway-api"
+            ]
+          },
+          {
+            "group": "Agent API",
+            "pages": [
+              "api-reference/agent-api"
             ]
           }
         ]
@@ -71,14 +147,14 @@
     "global": {
       "anchors": [
         {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
+          "anchor": "GitHub",
+          "href": "https://github.com/agentsystems/agentsystems",
+          "icon": "github"
         },
         {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
+          "anchor": "Discord",
+          "href": "https://discord.gg/H26CEWfT",
+          "icon": "discord"
         }
       ]
     }
@@ -90,33 +166,35 @@
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "label": "Platform",
+        "href": "https://github.com/agentsystems/agentsystems"
+      },
+      {
+        "label": "Agent Hub",
+        "href": "https://github.com/agentsystems"
       }
     ],
     "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "type": "github",
+      "href": "https://github.com/agentsystems/agentsystems"
     }
   },
   "contextual": {
     "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
+      "copy",
+      "view",
+      "chatgpt",
+      "claude",
+      "perplexity",
+      "cursor",
+      "vscode"
+    ]
   },
   "footer": {
     "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
+      "x": "https://x.com/agentsystems",
+      "github": "https://github.com/agentsystems",
+      "discord": "https://discord.gg/H26CEWfT"
     }
   }
 }
