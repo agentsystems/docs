@@ -1,0 +1,51 @@
+---
+title: 5-Minute Quick Start
+description: Get AgentSystems running quickly
+---
+
+# Quick Start
+
+Get AgentSystems running in 5 minutes.
+
+<Steps>
+  <Step title="Install AgentSystems">
+    Run the installation script:
+
+    ```bash
+    curl -fsSL https://github.com/agentsystems/agentsystems/releases/latest/download/install.sh | sh
+    ```
+  </Step>
+
+  <Step title="Initialize Your Deployment">
+    Create and configure your deployment:
+
+    ```bash
+    agentsystems init my-deployment
+    cd my-deployment
+    ```
+  </Step>
+
+  <Step title="Start the Platform">
+    Launch AgentSystems:
+
+    ```bash
+    agentsystems up
+    ```
+
+    The platform will be available at `http://localhost:18080`
+  </Step>
+
+  <Step title="Run Your First Agent">
+    Execute the hello-world agent:
+
+    ```bash
+    agentsystems run hello-world-agent
+    ```
+  </Step>
+</Steps>
+
+## What's Next?
+
+- [Configure AI models](/configuration/models) to connect your preferred providers
+- [Explore the Agent Hub](/user-guide/agent-hub) to discover available agents
+- [Build your first agent](/build-agents/quickstart) to create custom functionality

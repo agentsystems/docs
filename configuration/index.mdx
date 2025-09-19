@@ -1,0 +1,63 @@
+---
+title: Configuration Overview
+description: Configure the AgentSystems platform
+---
+
+# Configuration Overview
+
+AgentSystems uses a centralized configuration system to manage credentials, model connections, registries, and agent deployments.
+
+## Configuration Areas
+
+<Columns cols={2}>
+  <Card title="Credentials" icon="key" href="/configuration/credentials">
+    API keys and authentication tokens
+  </Card>
+  <Card title="AI Models" icon="brain" href="/configuration/models">
+    Connect to AI providers
+  </Card>
+  <Card title="Registries" icon="package" href="/configuration/registries">
+    Container registry connections
+  </Card>
+  <Card title="Agent Deployments" icon="rocket" href="/configuration/agents">
+    Define and deploy agents
+  </Card>
+</Columns>
+
+## Configuration File
+
+The main configuration file is `agentsystems-config.yml`:
+
+```yaml
+config_version: 1
+
+# Model connections
+model_connections:
+  gpt-4:
+    hosting_provider: "openai"
+    hosting_provider_model_id: "gpt-4"
+    auth:
+      api_key_env: "OPENAI_API_KEY"
+
+# Registry connections
+registry_connections:
+  dockerhub:
+    url: "docker.io"
+    auth:
+      method: "none"
+
+# Agent definitions
+agents:
+  - name: "hello-world-agent"
+    repo: "agentsystems/hello-world-agent"
+    tag: "latest"
+```
+
+## Environment Variables
+
+Sensitive credentials are stored as environment variables in `.env`:
+
+```bash
+OPENAI_API_KEY=sk-...
+ANTHROPIC_API_KEY=sk-ant-...
+```
