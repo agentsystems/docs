@@ -5,47 +5,234 @@ description: Get AgentSystems running quickly
 
 # Quick Start
 
-Get AgentSystems running in 5 minutes.
+Get AgentSystems up and running in 5 minutes. This guide walks you through installation, setup, and running your first agent.
+
+<Info>
+  **Prerequisites**: You'll need Docker installed on your system. The installation script will check for this and help you install it if needed.
+</Info>
+
+## Installation
 
 <Steps>
-  <Step title="Install AgentSystems">
-    Run the installation script:
+  <Step title="Run the Installation Script">
+    Open your terminal and run:
 
-    ```bash
-    curl -fsSL https://github.com/agentsystems/agentsystems/releases/latest/download/install.sh | sh
-    ```
+    <CodeGroup>
+      ```bash macOS/Linux
+      curl -fsSL https://github.com/agentsystems/agentsystems/releases/latest/download/install.sh | sh
+      ```
+
+      ```bash Alternative (wget)
+      wget -qO- https://github.com/agentsystems/agentsystems/releases/latest/download/install.sh | sh
+      ```
+    </CodeGroup>
+
+    The script will:
+    - Check system requirements
+    - Install the AgentSystems CLI (`agentsystems`)
+    - Verify Docker is available
+    - Set up necessary dependencies
   </Step>
 
-  <Step title="Initialize Your Deployment">
-    Create and configure your deployment:
+  <Step title="Create Your Deployment">
+    Initialize a new AgentSystems deployment:
 
     ```bash
     agentsystems init my-deployment
+    ```
+
+    When prompted, you can:
+    - Accept the default directory name or choose your own
+    - Optionally configure Langfuse for observability (press Enter to skip)
+
+    Then navigate to your deployment:
+
+    ```bash
     cd my-deployment
     ```
   </Step>
 
   <Step title="Start the Platform">
-    Launch AgentSystems:
+    Launch AgentSystems with a single command:
 
     ```bash
     agentsystems up
     ```
 
-    The platform will be available at `http://localhost:18080`
+    This command:
+    - Starts all platform services (gateway, database, UI)
+    - Pulls required Docker images
+    - Sets up networking and volumes
+    - Waits for services to be ready
+
+    <Note>
+      First-time startup may take a few minutes as Docker images are downloaded. Subsequent starts are much faster.
+    </Note>
+  </Step>
+
+  <Step title="Access the Web Interface">
+    Once the platform is running, open your browser to:
+
+    ```
+    http://localhost:18080
+    ```
+
+    You'll see the AgentSystems dashboard showing:
+    - System status
+    - Available agents
+    - Recent executions
+    - Quick actions
   </Step>
 
   <Step title="Run Your First Agent">
-    Execute the hello-world agent:
+    The platform includes a `hello-world-agent` for testing. Run it using either method:
 
+    **Option 1: Web UI**
+    1. Click on "Agents" in the navigation
+    2. Find the hello-world-agent card
+    3. Click to open agent details
+    4. Click "Execute" to run the agent
+
+    **Option 2: CLI**
     ```bash
     agentsystems run hello-world-agent
     ```
+
+    The agent will:
+    - Start its container (if not running)
+    - Process the request
+    - Return results with historical events
   </Step>
 </Steps>
 
-## What's Next?
+## What Just Happened?
 
-- [Configure AI models](/configuration/models) to connect your preferred providers
-- [Explore the Agent Hub](/user-guide/agent-hub) to discover available agents
-- [Build your first agent](/build-agents/quickstart) to create custom functionality
+When you ran these commands, AgentSystems:
+
+1. **Deployed a complete platform** including:
+   - API Gateway (port 18080)
+   - PostgreSQL database for audit logs
+   - Web UI for management
+   - Docker network for agent communication
+
+2. **Configured the environment** with:
+   - Default agent registry connections
+   - Artifact storage volumes
+   - Security policies
+
+3. **Prepared for agent execution** by:
+   - Setting up container orchestration
+   - Initializing the audit system
+   - Creating execution contexts
+
+## Next Steps
+
+Now that AgentSystems is running, you can:
+
+<CardGroup cols={2}>
+  <Card title="Configure AI Models" icon="brain" href="/configuration/models">
+    Connect to OpenAI, Anthropic, or run local models with Ollama
+  </Card>
+
+  <Card title="Explore the UI" icon="desktop" href="/user-guide/running-agents">
+    Learn about the web interface features and capabilities
+  </Card>
+
+  <Card title="Install More Agents" icon="download" href="/user-guide/agent-hub">
+    Browse and deploy agents from the community
+  </Card>
+
+  <Card title="Build Your First Agent" icon="hammer" href="/build-agents/quickstart">
+    Create a custom agent for your specific needs
+  </Card>
+</CardGroup>
+
+## Common Commands
+
+Here are the most useful commands for managing your deployment:
+
+```bash
+# View platform status
+agentsystems status
+
+# Stop the platform
+agentsystems down
+
+# Restart services
+agentsystems restart
+
+# View logs
+agentsystems logs
+
+# Update platform images
+agentsystems update
+```
+
+## Troubleshooting
+
+<AccordionGroup>
+  <Accordion title="Port 18080 is already in use">
+    Another service is using port 18080. Either:
+    - Stop the conflicting service
+    - Or modify `docker-compose.yml` to use a different port
+  </Accordion>
+
+  <Accordion title="Docker is not running">
+    Start Docker Desktop (macOS/Windows) or the Docker daemon (Linux):
+    ```bash
+    # macOS
+    open -a Docker
+
+    # Linux
+    sudo systemctl start docker
+    ```
+  </Accordion>
+
+  <Accordion title="Permission denied errors">
+    On Linux, you may need to add your user to the docker group:
+    ```bash
+    sudo usermod -aG docker $USER
+    newgrp docker
+    ```
+  </Accordion>
+
+  <Accordion title="Slow first startup">
+    Initial setup downloads several Docker images. This is normal and only happens once. Subsequent starts are much faster.
+  </Accordion>
+</AccordionGroup>
+
+## System Requirements
+
+<Tabs>
+  <Tab title="Minimum">
+    - **OS**: macOS, Linux, or Windows with WSL2
+    - **CPU**: 2 cores
+    - **RAM**: 4 GB
+    - **Disk**: 10 GB free space
+    - **Docker**: Version 20.10 or later
+    - **Python**: 3.11 or later
+  </Tab>
+
+  <Tab title="Recommended">
+    - **OS**: macOS or Ubuntu Linux
+    - **CPU**: 4+ cores
+    - **RAM**: 8 GB or more
+    - **Disk**: 20 GB free space
+    - **Docker**: Latest stable version
+    - **Python**: 3.11 or later
+    - **Network**: Stable internet for pulling images
+  </Tab>
+</Tabs>
+
+## Getting Help
+
+If you encounter issues:
+
+1. Check the [troubleshooting guide](/user-guide/monitoring/troubleshooting)
+2. Search existing [GitHub issues](https://github.com/agentsystems/agentsystems/issues)
+3. Join our [Discord community](https://discord.gg/H26CEWfT) for support
+4. Review the [full installation guide](/getting-started/installation) for detailed options
+
+<Note>
+  **Ready for more?** Check out the [Core Concepts](/getting-started/concepts) to understand how AgentSystems works, or jump to [Configuration](/configuration) to connect your AI models.
+</Note>
