@@ -1,16 +1,16 @@
-# Mintlify Starter Kit
+# AgentSystems Documentation
 
-Use the starter kit to get your docs deployed and ready to customize.
+Documentation for the AgentSystems platform - a system for running AI agents on your infrastructure.
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+This repository contains documentation for:
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
+- Platform installation and setup
+- Configuration guides (models, credentials, registries)
+- Running and managing agents
+- Building custom agents
+- API reference
 
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
+**[Visit the documentation](https://docs.agentsystems.ai)** *(in development)*
 
 ## Development
 
@@ -30,7 +30,16 @@ View your local preview at `http://localhost:3000`.
 
 ## Publishing changes
 
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
+Changes to the documentation are typically deployed via CI/CD when merged to the main branch.
+
+## Contributing
+
+We welcome contributions to improve the documentation! Please:
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
 ## Need help?
 
@@ -40,4 +49,6 @@ Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/sett
 - If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
 
 ### Resources
+- [AgentSystems GitHub](https://github.com/agentsystems/agentsystems)
+- [AgentSystems Discord](https://discord.gg/H26CEWfT)
 - [Mintlify documentation](https://mintlify.com/docs)
