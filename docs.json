@@ -33,9 +33,10 @@
             "pages": [
               "configuration/index",
               "configuration/credentials",
-              "configuration/registries",
               "configuration/models",
-              "configuration/agents"
+              "configuration/registries",
+              "configuration/agents",
+              "configuration/egress-control"
             ]
           }
         ]
