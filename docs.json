@@ -35,8 +35,7 @@
               "configuration/credentials",
               "configuration/registries",
               "configuration/models",
-              "configuration/agents",
-              "configuration/egress-control"
+              "configuration/agents"
             ]
           }
         ]
