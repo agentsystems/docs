@@ -14,12 +14,11 @@
         "tab": "Getting Started",
         "groups": [
           {
-            "group": "Welcome",
+            "group": "Welcome to AgentSystems",
             "pages": [
               "getting-started/index",
-              "getting-started/installation",
               "getting-started/quickstart",
-              "getting-started/architecture"
+              "getting-started/key-concepts"
             ]
           }
         ]
@@ -55,14 +54,12 @@
         ]
       },
       {
-        "tab": "Build Agents",
+        "tab": "Deploy Agents",
         "groups": [
           {
-            "group": "Agent Development",
+            "group": "Agent Deployment",
             "pages": [
-              "build-agents/quickstart",
-              "build-agents/agent-contract",
-              "build-agents/using-toolkit"
+              "deploy-agents/quickstart"
             ]
           }
         ]
@@ -84,8 +81,8 @@
     }
   },
   "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
+    "light": "/logo/light.png",
+    "dark": "/logo/dark.png"
   },
   "navbar": {
     "links": [

@@ -1,8 +1,70 @@
 ---
-title: Audit Trail
-description: Security audit logs
+title: Audit Logs
+description: Hash-chained audit trail system
 ---
 
-# Audit Logs
 
-Coming soon: Understanding the audit trail.
+AgentSystems includes an audit trail feature that uses cryptographic hash chaining for agent executions.
+
+<Info>
+Agent executions are logged with cryptographic hashing for audit purposes.
+</Info>
+
+## How It Works
+
+The audit system creates a hash-chained log of execution records:
+
+<Steps>
+  <Step title="Event Capture">
+    System records agent executions automatically
+  </Step>
+
+  <Step title="Hash Generation">
+    Each log entry includes a SHA-256 hash of its contents
+  </Step>
+
+  <Step title="Chain Linking">
+    Each hash includes the previous entry's hash, creating a chain
+  </Step>
+
+  <Step title="Verification">
+    Changes to past entries can be detected via hash verification (for tamper-evidence)
+  </Step>
+</Steps>
+
+## Viewing Audit Logs
+
+### Via UI
+
+Navigate to **Executions** in the AgentSystems UI at http://localhost:3001.
+
+The UI displays:
+- Execution timeline
+- Agent details
+- Request/response data
+- Hash verification (for tamper-evidence) status
+- Filter and search options
+
+
+
+## Audit Features
+
+<Columns cols={2}>
+  <Card title="Change Detection" icon="shield-check">
+    Can help detect modifications to past logs
+  </Card>
+
+  <Card title="Audit Trail" icon="file-signature">
+    Cryptographic hashing (for tamper-evidence) of execution history
+  </Card>
+
+  <Card title="Time Ordering" icon="clock">
+    Records chronological sequence of events
+  </Card>
+
+  <Card title="Hash Verification" icon="lock">
+    Uses SHA-256 hashing for verification (tamper-evidence)
+  </Card>
+</Columns>
+
+

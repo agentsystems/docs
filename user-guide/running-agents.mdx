@@ -1,8 +1,117 @@
 ---
 title: Running Agents
-description: How to execute agents
+description: Execute agents via UI or CLI
 ---
 
-# Running Agents
 
-Coming soon: Complete guide to running agents.
+Agents process requests with JSON payloads and optional file uploads. You can run them through the UI or CLI.
+
+## Running via UI
+
+Navigate to **Agents** in the AgentSystems UI at http://localhost:3001.
+
+<Steps>
+  <Step title="Select Agent">
+    Browse available agents and click **Turn On** on your chosen agent (agents auto-start if invoked while off)
+  </Step>
+
+  <Step title="Configure Request">
+    - Enter JSON payload in the request editor
+    - Upload input files if needed
+    - Review agent requirements
+  </Step>
+
+  <Step title="Execute">
+    Click **Execute** to start execution
+  </Step>
+
+  <Step title="Monitor Progress">
+    Watch real-time progress updates and logs
+  </Step>
+
+  <Step title="Access Results">
+    Download output files when complete
+  </Step>
+</Steps>
+
+## Running via CLI
+
+Use the SDK CLI to run agents programmatically. See [CLI Commands](/user-guide/cli-commands) for details.
+
+## Request Structure
+
+Every agent request includes:
+
+<AccordionGroup>
+  <Accordion title="Payload (Required)">
+    JSON object with agent-specific parameters:
+    ```json
+    {
+      "action": "analyze",
+      "format": "csv",
+      "options": {
+        "verbose": true
+      }
+    }
+    ```
+  </Accordion>
+
+  <Accordion title="Input Files (Optional)">
+    Upload files for processing:
+    - Via UI: Drag & drop or browse
+    - Via CLI: Use `--input-file` flag
+    - Multiple files supported
+    - All common formats accepted
+  </Accordion>
+
+  <Accordion title="Thread ID (Generated)">
+    Unique identifier for the execution:
+    - Auto-generated if not provided
+    - Used to track progress
+    - Required for accessing artifacts
+  </Accordion>
+</AccordionGroup>
+
+## Response Handling
+
+Agents return structured responses:
+
+```json
+{
+  "thread_id": "abc123-def456",
+  "status": "completed",
+  "progress": 100,
+  "messages": [
+    {
+      "type": "result",
+      "content": "Analysis complete"
+    }
+  ],
+  "artifacts": [
+    "output/results.csv",
+    "output/report.pdf"
+  ]
+}
+```
+
+### Status Values
+
+| Status | Description |
+|--------|-------------|
+| `pending` | Request queued |
+| `in_progress` | Agent processing |
+| `completed` | Success |
+| `failed` | Error occurred |
+
+## Accessing Output Files
+
+After execution, download output files through the UI execution details page.
+
+## Progress Tracking
+
+Agents provide real-time progress updates in the UI.
+
+## Error Handling
+
+When agents fail, error details appear in the UI execution log.
+

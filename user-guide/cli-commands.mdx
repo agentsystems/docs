@@ -1,8 +1,198 @@
 ---
-title: CLI Reference
-description: Complete CLI command reference
+title: CLI Commands
+description: SDK command reference
 ---
 
-# CLI Reference
 
-Coming soon: All CLI commands and options.
+The AgentSystems SDK includes command-line tools for managing your platform deployment.
+
+<Info>
+The `agentsystems` CLI includes platform management commands.
+</Info>
+
+## Platform Management
+
+### Lifecycle
+
+Control the platform lifecycle with these commands:
+
+<Tabs>
+  <Tab title="Start Platform">
+    ```bash
+    # Start all services
+    agentsystems up
+
+    # Start in detached mode (default)
+    agentsystems up --detach
+
+    # Start with fresh containers
+    agentsystems up --fresh
+
+    # Start without Langfuse tracing
+    agentsystems up --no-langfuse
+    ```
+
+    The platform starts at:
+    - UI: http://localhost:3001
+    - Gateway: http://localhost:18080
+  </Tab>
+
+  <Tab title="Stop Platform">
+    ```bash
+    # Stop all services
+    agentsystems down
+
+    # Stop and remove volumes
+    agentsystems down --volumes
+    ```
+  </Tab>
+
+  <Tab title="Restart">
+    ```bash
+    # Quick restart
+    agentsystems restart
+
+    # Restart with fresh volumes
+    agentsystems restart --volumes
+    ```
+  </Tab>
+</Tabs>
+
+### Monitoring
+
+Check platform status and view logs:
+
+<Tabs>
+  <Tab title="Status">
+    ```bash
+    # Show all container status
+    agentsystems status
+
+    # Check specific service
+    agentsystems status --service gateway
+    ```
+  </Tab>
+
+  <Tab title="Logs">
+    ```bash
+    # Stream all logs
+    agentsystems logs
+
+    # View gateway logs
+    agentsystems logs --service gateway
+
+    # Tail last 100 lines
+    agentsystems logs --tail 100
+
+    # Follow log output
+    agentsystems logs --follow
+    ```
+  </Tab>
+</Tabs>
+
+## Running Agents
+
+Execute agents with JSON payloads and optional file uploads:
+
+<Tabs>
+  <Tab title="Simple Execution">
+    ```bash
+    agentsystems run hello-world-agent '{"date": "October 15, 1979"}'
+    ```
+  </Tab>
+
+  <Tab title="With File Upload">
+    ```bash
+    agentsystems run my-agent '{"format": "csv"}' \
+      --input-file data.csv
+    ```
+  </Tab>
+</Tabs>
+
+## Artifact Management
+
+Access input and output files from agent executions:
+
+```bash
+# Get output directory for a thread
+agentsystems artifacts-path abc123-def456
+
+# Get specific output file path
+agentsystems artifacts-path abc123-def456 result.json
+
+# Get input directory
+agentsystems artifacts-path abc123-def456 --input
+
+# Get specific input file
+agentsystems artifacts-path abc123-def456 data.csv --input
+```
+
+
+## System Maintenance
+
+Manage platform resources and updates:
+
+<Tabs>
+  <Tab title="Clean System">
+    ```bash
+    # Nuclear cleanup
+    agentsystems clean
+
+    # Skip Docker prune
+    agentsystems clean --no-prune-system
+    ```
+
+    Removes all containers, volumes, and optionally prunes Docker.
+  </Tab>
+
+  <Tab title="Update Platform">
+    ```bash
+    # Update core images
+    agentsystems update
+    ```
+
+    Pulls latest versions of platform components.
+  </Tab>
+</Tabs>
+
+
+## Command Reference
+
+### Platform Commands
+
+| Command | Description |
+|---------|-------------|
+| `agentsystems init [DIR]` | Initialize new deployment |
+| `agentsystems up` | Start platform services |
+| `agentsystems down` | Stop platform services |
+| `agentsystems restart` | Restart platform |
+| `agentsystems logs` | View service logs |
+| `agentsystems status` | Check service status |
+| `agentsystems run` | Execute an agent |
+| `agentsystems artifacts-path` | Get artifact file paths |
+| `agentsystems clean` | Deep clean system |
+| `agentsystems update` | Update platform images |
+| `agentsystems version` | Show SDK version |
+| `agentsystems info` | Show diagnostics |
+
+
+## Command Alias
+
+For convenience, a shorter alias is available:
+
+- `agntsys` → `agentsystems`
+
+## Getting Help
+
+All commands support `--help` to display detailed usage information, available options, and examples:
+
+```bash
+# Show all available commands and global options
+agentsystems --help
+
+# Show options for running agents (payloads, file uploads, polling)
+agentsystems run --help
+
+# Show options for viewing logs (filtering, following, tail)
+agentsystems logs --help
+```

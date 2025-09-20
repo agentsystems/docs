@@ -1,8 +1,66 @@
 ---
-title: Files & Artifacts
-description: Working with agent files
+title: Working with Files
+description: Understanding the artifacts system
 ---
 
-# Files & Artifacts
 
-Coming soon: Managing input files and output artifacts.
+The artifacts system uses separate file storage for each agent execution. Each thread has its own input and output directories.
+
+<Info>
+Files are thread-scoped by design; cross-thread access is blocked by platform policy but should not be relied on as a hard security boundary.
+</Info>
+
+## How Artifacts Work
+
+<Steps>
+  <Step title="Thread Creation">
+    Each agent execution gets a unique thread ID and isolated storage
+  </Step>
+
+  <Step title="Input Files">
+    Uploaded files are placed in the thread's input directory
+  </Step>
+
+  <Step title="Processing">
+    Agent reads input files and generates output files
+  </Step>
+
+  <Step title="Output Files">
+    Results are written to the thread's output directory
+  </Step>
+
+  <Step title="Retrieval">
+    Download output files via UI, CLI, or API
+  </Step>
+</Steps>
+
+## File Structure
+
+Each thread has this directory layout:
+
+```
+artifacts/
+└── threads/
+    └── abc123-def456/           # Thread ID
+        ├── input/                # Input files
+        │   ├── data.csv
+        │   └── config.json
+        └── output/               # Output files
+            ├── results.csv
+            └── report.pdf
+```
+
+## Uploading Input Files
+
+### Via UI
+
+In the agent detail page at http://localhost:3001:
+1. Click **Choose Files**
+2. Select files to upload
+3. Files appear in the input list
+
+## Downloading Output Files
+
+### Via UI
+
+Navigate to the execution details to see output files. Click to download.

@@ -34,19 +34,18 @@ Changes to the documentation are typically deployed via CI/CD when merged to the
 
 ## Documentation Structure
 
-### Phase 1: Core Documentation (17 pages)
+### Phase 1: Core Documentation (14 pages)
 
-The documentation is organized into sections that guide users from installation through agent development:
+The documentation is organized into sections that guide users from installation through agent deployment:
 
 ```
 docs/
-├── 🚀 Getting Started (4 pages)
-│   ├── index.mdx                 # Welcome to AgentSystems
-│   ├── installation.mdx           # System Requirements & Setup
-│   ├── quickstart.mdx             # 5-Minute Quick Start
-│   └── architecture.mdx           # How Components Work Together
+├── 🚀 Getting Started (3 pages)
+│   ├── index.mdx                 # Introduction
+│   ├── quickstart.mdx             # 5-Minute Quick Start with System Requirements
+│   └── key-concepts.mdx           # How Components Work Together
 │
-├── ⚙️ Configuration (5 pages) - Critical for using agents beyond hello-world
+├── ⚙️ Configuration (5 pages)
 │   ├── index.mdx                  # Configuration Overview & Dependency Chain
 │   ├── credentials.mdx            # Step 1: API Keys & Environment Variables
 │   ├── model-connections.mdx      # Step 2: AI Provider Connections
@@ -55,18 +54,14 @@ docs/
 │
 ├── 📖 User Guide (5 pages)
 │   ├── cli-commands.mdx           # SDK Command Reference
-│   ├── running-agents.mdx         # Execute Agents Step-by-Step
+│   ├── running-agents.mdx         # Execute Agents via UI
 │   ├── working-with-files.mdx     # Artifacts & File I/O
-│   ├── audit-logs.mdx             # Cryptographic Audit Trail
-│   └── agent-hub.mdx              # Finding & Installing Agents
+│   ├── audit-logs.mdx             # Hash-Chained Audit Trail
+│   └── agent-hub.mdx              # Future Agent Discovery Platform
 │
-└── 🛠️ Build Agents (3 pages)
-    ├── quickstart.mdx             # Your First Agent in 10 Minutes
-    ├── agent-contract.mdx         # Required Endpoints (/invoke, /health)
-    └── using-toolkit.mdx          # Model Access & Progress Tracking
+└── 🚀 Deploy Agents (1 page)
+    └── quickstart.mdx             # Coming Soon
 ```
-
-**Phase 1 Total: 17 essential pages** covering everything users need to get started, configure, and build agents.
 
 ### Future Phases
 
