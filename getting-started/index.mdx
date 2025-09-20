@@ -1,37 +1,51 @@
 ---
-title: Welcome to AgentSystems
-description: Run AI agents on your infrastructure
+title: Introduction
+description: Run AI agents on your own infrastructure
 ---
 
-# Welcome to AgentSystems
+## A Step Towards AI Sovereignty
 
-AgentSystems is a platform for running AI agents on your infrastructure.
+AgentSystems is an open-source platform for running containerized AI agents on your infrastructure with control over your data and AI provider choices.
 
-## What is AgentSystems?
+<Info>
+**What is AgentSystems?** A self-hosted platform that runs AI agents in Docker containers, supports multiple AI providers, and includes audit logging capabilities.
+</Info>
 
-AgentSystems allows you to:
-- Deploy and run AI agents locally or on your servers
-- Connect to various AI model providers (OpenAI, Anthropic, Ollama)
-- Maintain control over your data and credentials
-- Build and share custom agents
+## The Platform Approach
 
-## Choose Your Path
+AgentSystems addresses common AI deployment challenges:
+- **Data Location**: Process data on your own infrastructure
+- **Provider Flexibility**: Support for OpenAI, Anthropic, AWS Bedrock, and Ollama
+- **Cost Visibility**: Run agents on your hardware with your API keys
+- **Audit Requirements**: Hash-chained logging for tracking operations
 
-<Columns cols={3}>
-  <Card title="Quick Start" icon="rocket" href="/getting-started/quickstart">
-    Get running in 5 minutes
+## Key Capabilities
+
+<Columns cols={2}>
+  <Card title="Local Execution" icon="server">
+    Deploy AI agents on your hardware with Docker
   </Card>
-  <Card title="Configure Platform" icon="gear" href="/configuration">
-    Set up models and credentials
+
+  <Card title="Multiple Providers" icon="shuffle">
+    Use OpenAI, Anthropic, AWS Bedrock, or local models
   </Card>
-  <Card title="Build Agents" icon="hammer" href="/build-agents">
-    Create custom agents
+
+  <Card title="Container Architecture" icon="shield">
+    Each agent runs in a Docker container
+  </Card>
+
+  <Card title="Audit Logging" icon="file-signature">
+    Hash-chained logs are designed to make post-hoc changes easier to detect
   </Card>
 </Columns>
 
-## Core Principles
+## Use Cases
 
-- **Data Sovereignty**: Your data stays on your infrastructure
-- **Model Flexibility**: Use any supported AI provider
-- **Container Isolation**: Agents run in isolated Docker containers
-- **Open Source**: Transparent, auditable codebase
+The platform targets scenarios requiring local AI execution:
+
+- Processing sensitive documents
+- Running AI workloads on-premise
+- Keeping data within specific infrastructure
+- Testing multiple AI providers
+- Building containerized AI agents
+

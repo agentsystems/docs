@@ -1,8 +1,102 @@
 ---
-title: Agent Deployments
-description: Define and deploy agents
+title: Agents
+description: Deploy and configure agents
 ---
 
-# Agent Deployments
 
-Coming soon: How to define and deploy agents.
+Agents are containerized AI applications that process requests using configured model connections. This page covers how to deploy and configure agents.
+
+<Warning>
+Before deploying agents, you need:
+1. [Model connections](/configuration/model-connections) configured for AI providers
+2. [Registry connections](/configuration/registry-connections) for pulling agent images
+</Warning>
+
+## Managing via UI
+
+Navigate to **Configuration → Agents** in the AgentSystems UI at http://localhost:3001.
+
+The UI allows you to:
+- Configure agent settings
+- Enable/disable agents
+
+## Agent Configuration
+
+Each agent deployment requires:
+
+| Field | Description | Required |
+|-------|-------------|----------|
+| `name` | Unique agent identifier | Yes |
+| `image` | Full image reference OR | Choice of |
+| `registry_connection` + `repo` + `tag` | Registry and image details | one |
+| `egress_allowlist` | Allowed outbound URLs | No |
+| `artifact_permissions` | File access controls | No |
+
+## Configuration Example
+
+Agent with restricted internet access:
+
+```yaml
+agents:
+  - name: web-scraper-agent
+    image: docker.io/agentsystems/scraper:latest
+    egress_allowlist:
+      - "https://api.example.com/*"
+      - "https://data.provider.com/v1/*"
+```
+
+By default, outbound requests are limited to specified URL patterns.
+
+## Manual Configuration
+
+Edit `agentsystems-config.yml` directly:
+
+```yaml
+config_version: 1
+
+agents:
+  # Hello world demo agent
+  - name: hello-world-agent
+    image: docker.io/agentsystems/hello-world-agent:latest
+
+  # Agent from private registry
+  - name: custom-agent
+    registry_connection: dockerhub_private
+    repo: mycompany/custom-agent
+    tag: v1.0.0
+
+  # Agent with egress control
+  - name: web-agent
+    image: ghcr.io/company/agent:latest
+    egress_allowlist:
+      - "https://api.allowed.com/*"
+```
+
+After editing, restart the platform:
+```bash
+agentsystems restart
+```
+
+## Agent Lifecycle
+
+<Steps>
+  <Step title="Deployment">
+    When you add an agent to configuration, AgentSystems:
+    - Pulls the image from the specified registry
+    - Creates a Docker container with proper labels
+    - Configures networking and volumes
+  </Step>
+
+  <Step title="Discovery">
+    The gateway discovers agents via Docker labels:
+    - `agent.enabled=true` marks container as an agent
+    - `agent.port=8000` specifies the agent's port
+  </Step>
+
+  <Step title="Idle Management">
+    Agents by default stop after ~15 minutes of inactivity to save resources.
+    They typically restart on the next request (configurable).
+  </Step>
+</Steps>
+
+

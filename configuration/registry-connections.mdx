@@ -1,8 +1,104 @@
 ---
-title: Container Registries
-description: Configure registry connections
+title: Registry Connections
+description: Configure container registry access
 ---
 
-# Container Registries
 
-Coming soon: Setting up Docker Hub and private registry connections.
+Registry connections allow AgentSystems to pull agent images from container registries. You can connect to multiple registries simultaneously.
+
+<Info>
+Public registries typically work without credentials; some images may require authentication or be rate-limited. Private registries require authentication configured in [credentials](/configuration/credentials).
+</Info>
+
+## Managing via UI
+
+Navigate to **Configuration → Registry Connections** in the AgentSystems UI at http://localhost:3001.
+
+The UI allows you to:
+- Add public and private registries
+- Configure authentication methods
+- Enable/disable registry connections
+
+
+## Configuration Structure
+
+Each registry connection requires:
+
+| Field | Description | Required |
+|-------|-------------|----------|
+| `url` | Registry hostname (e.g., `docker.io`, `ghcr.io`) | Yes |
+| `enabled` | Whether this connection is active | Yes |
+| `auth.method` | Authentication type: `none`, `basic`, `bearer` | Yes |
+| `auth.username_env` | Environment variable for username (basic auth) | No |
+| `auth.password_env` | Environment variable for password (basic auth) | No |
+| `auth.token_env` | Environment variable for token (bearer auth) | No |
+
+## Manual Configuration
+
+Edit `agentsystems-config.yml` directly:
+
+```yaml
+config_version: 1
+
+registry_connections:
+  # Public Docker Hub (no auth needed)
+  dockerhub_public:
+    url: docker.io
+    enabled: true
+    auth:
+      method: none
+
+  # Private Docker Hub
+  dockerhub_private:
+    url: docker.io
+    enabled: true
+    auth:
+      method: basic
+      username_env: DOCKERHUB_USER
+      password_env: DOCKERHUB_TOKEN
+
+  # GitHub Container Registry
+  github:
+    url: ghcr.io
+    enabled: true
+    auth:
+      method: basic
+      username_env: GHCR_USER
+      password_env: GHCR_TOKEN
+```
+
+After editing, restart the platform:
+```bash
+agentsystems restart
+```
+
+## Registry Usage in Agent Configuration
+
+Agents reference registry connections when specifying their image source:
+
+```yaml
+agents:
+  - name: my-agent
+    registry_connection: dockerhub_private  # References the connection ID
+    repo: mycompany/my-agent
+    tag: v1.0.0
+```
+
+## Authentication Methods
+
+<AccordionGroup>
+  <Accordion title="None">
+    For public registries and images. No credentials required.
+  </Accordion>
+
+  <Accordion title="Basic">
+    Username and password/token authentication. Used by Docker Hub, GHCR, and many private registries.
+  </Accordion>
+
+  <Accordion title="Bearer">
+    Token-based authentication. Common for enterprise registries.
+  </Accordion>
+
+</AccordionGroup>
+
+

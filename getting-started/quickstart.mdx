@@ -1,11 +1,14 @@
 ---
-title: 5-Minute Quick Start
-description: Get AgentSystems running quickly
+title: Quick Start
+description: Deploy AgentSystems in 5 minutes
 ---
 
-# Quick Start
+## System Requirements
 
-Get AgentSystems running in 5 minutes.
+AgentSystems requires:
+- **Python 3.11 or higher**
+- **Docker** (Docker Desktop on macOS, Docker Engine on Linux)
+- **Operating System**: macOS or Ubuntu Linux
 
 <Steps>
   <Step title="Install AgentSystems">
@@ -16,36 +19,53 @@ Get AgentSystems running in 5 minutes.
     ```
   </Step>
 
-  <Step title="Initialize Your Deployment">
-    Create and configure your deployment:
+  <Step title="Initialize Deployment">
+    Create and enter your deployment directory:
 
     ```bash
     agentsystems init my-deployment
     cd my-deployment
     ```
+
+    The init command prompts for:
+    - Langfuse credentials for observability
+    - Admin credentials for the UI
   </Step>
 
   <Step title="Start the Platform">
-    Launch AgentSystems:
+    Launch all platform services:
 
     ```bash
     agentsystems up
     ```
 
-    The platform will be available at `http://localhost:18080`
+    This starts:
+    - Agent Control Plane (Gateway)
+    - AgentSystems UI at http://localhost:3001
+    - PostgreSQL database
   </Step>
 
-  <Step title="Run Your First Agent">
-    Execute the hello-world agent:
+  <Step title="Pull a Local Model">
+    Download a small model for local testing:
 
     ```bash
-    agentsystems run hello-world-agent
+    docker exec agentsystems-ollama-1 ollama pull gemma3:1b
     ```
+
+    This downloads a local AI model without needing API keys.
+  </Step>
+
+  <Step title="Open the UI">
+    Open http://localhost:3001 in your browser
+
+    The UI includes an interactive guided tour to execute your first local agent.
   </Step>
 </Steps>
 
-## What's Next?
+## Stop the Platform
 
-- [Configure AI models](/configuration/models) to connect your preferred providers
-- [Explore the Agent Hub](/user-guide/agent-hub) to discover available agents
-- [Build your first agent](/build-agents/quickstart) to create custom functionality
+When you're done:
+
+```bash
+agentsystems down
+```

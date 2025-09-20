@@ -1,0 +1,160 @@
+---
+title: Key Concepts
+description: How AgentSystems components work together
+---
+
+AgentSystems consists of several interconnected components that work together as an agent platform.
+
+## Core Components
+
+<Tabs>
+  <Tab title="Control Plane">
+    **Agent Control Plane (Gateway)**
+
+    The gateway is the central orchestration layer that:
+    - Discovers agent containers via Docker labels
+    - Routes requests to appropriate agents
+    - Manages container lifecycle (start/stop)
+    - Routes requests via HTTP proxy
+    - Logs operations with hash-chaining
+
+    Runs on port 18080 (external) / 8080 (internal)
+  </Tab>
+
+  <Tab title="UI">
+    **AgentSystems UI**
+
+    Web interface for platform management:
+    - Agent discovery and execution
+    - Configuration management
+    - Execution monitoring and history
+    - Audit log viewing
+
+    Accessible at http://localhost:3001
+  </Tab>
+
+  <Tab title="SDK">
+    **AgentSystems SDK**
+
+    Command-line tool for platform operations:
+    - Deployment initialization (`agentsystems init`)
+    - Service management (`agentsystems up/down`)
+    - Agent execution (`agentsystems run`)
+    - Log viewing (`agentsystems logs`)
+  </Tab>
+
+  <Tab title="Database">
+    **PostgreSQL**
+
+    Persistent storage for:
+    - Execution history
+    - Audit logs with hash-chaining
+    - Agent metadata
+    - Configuration data
+  </Tab>
+</Tabs>
+
+## Request Flow
+
+<Steps>
+  <Step title="Client Request">
+    User initiates agent execution via UI or SDK CLI
+  </Step>
+
+  <Step title="Gateway Processing">
+    Control plane receives request, generates thread ID, and logs to audit trail
+  </Step>
+
+  <Step title="Agent Discovery">
+    Gateway finds target agent container via Docker labels (`agent.enabled=true`)
+  </Step>
+
+  <Step title="Container Management">
+    If agent is stopped, gateway automatically starts the container
+  </Step>
+
+  <Step title="Request Forwarding">
+    Gateway forwards request to agent's `/invoke` endpoint with `X-Thread-Id` header
+  </Step>
+
+  <Step title="Agent Processing">
+    Agent processes request using configured AI models and saves outputs to `/artifacts/{thread_id}/out/`
+  </Step>
+
+  <Step title="Response Return">
+    Agent returns response, gateway logs completion, and client receives results
+  </Step>
+</Steps>
+
+## Network Architecture
+
+<Info>
+Components communicate through Docker networks.
+</Info>
+
+### Docker Networks
+
+- **agents-net**: Platform services communication
+- **agents-int**: Agent-to-gateway isolated network
+
+### Port Mappings
+
+| Service | External Port | Internal Port |
+|---------|--------------|---------------|
+| UI | 3001 | 3001 |
+| Gateway | 18080 | 8080 |
+| PostgreSQL | - | 5432 |
+| Proxy | - | 3128 |
+
+## File System Structure
+
+### Artifacts Directory
+
+Each agent invocation gets isolated storage:
+
+```
+/artifacts/
+├── {thread-id}/
+│   ├── in/          # Input files from client
+│   └── out/         # Output files from agent
+```
+
+### Configuration Files
+
+The UI manages configuration files that control the platform:
+
+- **`.env`**: API keys and credentials
+- **`agentsystems-config.yml`**: Model connections, registries, and agents
+
+<Note>
+Configuration changes made in the UI are written to these files and take effect on platform restart.
+</Note>
+
+## System Architecture
+
+<Accordion title="Container Isolation">
+Each agent runs in a separate Docker container with:
+- Resource limits
+- Network isolation
+- Filesystem boundaries
+- Runs in separate containers
+</Accordion>
+
+<Accordion title="Credential Management">
+- API keys stored in environment variables
+- Credentials managed separately from agent containers
+- Deployment-specific credential isolation
+</Accordion>
+
+<Accordion title="Audit Trail">
+- Operations logged to PostgreSQL
+- Hash-chaining of log entries
+- Request/response tracking
+</Accordion>
+
+<Accordion title="Egress Control">
+- HTTP proxy for URL allowlist configuration
+- Per-agent network policies
+- Configurable outbound request policies
+</Accordion>
+

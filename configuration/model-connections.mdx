@@ -1,8 +1,82 @@
 ---
-title: AI Model Connections
+title: Model Connections
 description: Connect to AI providers
 ---
 
-# Model Connections
 
-Coming soon: Configuring connections to OpenAI, Anthropic, Ollama, and more.
+Model connections define how agents access AI providers. Each connection maps a model ID to a specific provider and authentication method.
+
+<Warning>
+Set up [credentials](/configuration/credentials) before configuring model connections.
+</Warning>
+
+## Managing via UI
+
+Navigate to **Configuration → Model Connections** in the AgentSystems UI at http://localhost:3001.
+
+The UI allows you to:
+- Add connections to AI providers
+- Enable/disable connections
+
+## Supported Models
+
+| Model ID | Display Name | Providers | Required Credentials |
+|----------|--------------|-----------|---------------------|
+| `gpt-4o` | GPT-4o | OpenAI | `OPENAI_API_KEY` |
+| `gpt-4o-mini` | GPT-4o mini | OpenAI | `OPENAI_API_KEY` |
+| `claude-3-5-sonnet` | Claude 3.5 Sonnet | Anthropic, AWS Bedrock | `ANTHROPIC_API_KEY` or AWS credentials |
+| `claude-3-5-haiku` | Claude 3.5 Haiku | Anthropic, AWS Bedrock | `ANTHROPIC_API_KEY` or AWS credentials |
+| `llama3.1:8b` | Llama 3.1 8B | Ollama, AWS Bedrock | None (Ollama) or AWS credentials |
+| `gemma3:1b` | Gemma 3 1B | Ollama | None (local) |
+| `nova-pro` | Amazon Nova Pro | AWS Bedrock | AWS credentials |
+
+<Note>
+For the full list of supported models, check the Model Connections page in the UI at http://localhost:3001.
+</Note>
+
+## Configuration Structure
+
+Each model connection requires:
+
+| Field | Description | Required |
+|-------|-------------|----------|
+| `hosting_provider` | Provider name (`openai`, `anthropic`, `amazon_bedrock`, `ollama`) | Yes |
+| `hosting_provider_model_id` | Provider-specific model identifier | Yes |
+| `enabled` | Whether this connection is active | Yes |
+| `auth` | Authentication configuration | Yes |
+| `hosting_provider_base_url` | Custom endpoint (Ollama only) | No |
+| `hosting_provider_region` | AWS region (Bedrock only) | No |
+
+## Manual Configuration
+
+Edit `agentsystems-config.yml` directly:
+
+```yaml
+config_version: 1
+
+model_connections:
+  # Give each connection a unique ID
+  my-gpt4-connection:
+    hosting_provider: openai
+    hosting_provider_model_id: gpt-4
+    enabled: true
+    auth:
+      method: api_key
+      api_key_env: OPENAI_API_KEY
+
+  my-claude-connection:
+    hosting_provider: anthropic
+    hosting_provider_model_id: claude-3-opus-20240229
+    enabled: true
+    auth:
+      method: api_key
+      api_key_env: ANTHROPIC_API_KEY
+```
+
+After editing, restart the platform:
+```bash
+agentsystems restart
+```
+
+
+
