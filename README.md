@@ -55,7 +55,7 @@ docs/
 ├── 📖 User Guide (5 pages)
 │   ├── cli-commands.mdx           # SDK Command Reference
 │   ├── running-agents.mdx         # Execute Agents via UI
-│   ├── working-with-files.mdx     # Artifacts & File I/O
+│   ├── artifacts.mdx              # Artifacts & File I/O
 │   ├── audit-logs.mdx             # Hash-Chained Audit Trail
 │   └── agent-hub.mdx              # Future Agent Discovery Platform
 │
