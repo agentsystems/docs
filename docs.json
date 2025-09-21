@@ -3,8 +3,8 @@
   "theme": "mint",
   "name": "AgentSystems",
   "colors": {
-    "primary": "#00a089",
-    "light": "#00a089",
+    "primary": "#00b6a0",
+    "light": "#00b6a0",
     "dark": "#47a1d9"
   },
   "favicon": "/agentsystems-favicon.png",
@@ -12,13 +12,6 @@
     "color": {
       "light": "#f8fafc",
       "dark": "#0a0d11"
-    }
-  },
-  "fonts": {
-    "family": "Inter",
-    "weight": 400,
-    "heading": {
-      "weight": 600
     }
   },
   "navigation": {
