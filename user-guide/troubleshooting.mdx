@@ -1,0 +1,27 @@
+---
+title: Troubleshooting
+description: Common issues and solutions
+mode: "wide"
+---
+
+## Quick Fix
+
+Most issues can be resolved by restarting the platform:
+
+```bash
+agentsystems restart
+```
+
+This command stops and restarts all AgentSystems services, which often resolves:
+- Connection issues
+- Stuck agents
+- UI not updating
+- Configuration not applying
+
+## Still Having Issues?
+
+If restarting doesn't help:
+
+1. Check logs: `agentsystems logs`
+2. Review status: `agentsystems status`
+3. Report issues: [GitHub Issues](https://github.com/agentsystems/agentsystems/issues)
