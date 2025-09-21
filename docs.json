@@ -54,7 +54,8 @@
               "user-guide/running-agents",
               "user-guide/working-with-files",
               "user-guide/audit-logs",
-              "user-guide/agent-hub"
+              "user-guide/agent-hub",
+              "user-guide/troubleshooting"
             ]
           }
         ]
