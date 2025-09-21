@@ -90,5 +90,4 @@ We welcome contributions to improve the documentation! Please:
 
 ### Resources
 - [AgentSystems GitHub](https://github.com/agentsystems/agentsystems)
-- [AgentSystems Discord](https://discord.gg/H26CEWfT)
 - [Mintlify documentation](https://mintlify.com/docs)
