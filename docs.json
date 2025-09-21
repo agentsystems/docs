@@ -52,7 +52,7 @@
             "pages": [
               "user-guide/cli-commands",
               "user-guide/running-agents",
-              "user-guide/working-with-files",
+              "user-guide/artifacts",
               "user-guide/audit-logs",
               "user-guide/agent-hub",
               "user-guide/troubleshooting"
