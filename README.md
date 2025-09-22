@@ -1,6 +1,6 @@
 # AgentSystems Documentation
 
-Documentation for the AgentSystems platform - a system for running AI agents on your infrastructure.
+Documentation for AgentSystems - the open platform for AI agents.
 
 This repository contains documentation for:
 
