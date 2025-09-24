@@ -1,6 +1,6 @@
 # AgentSystems Documentation
 
-Documentation for AgentSystems - the open platform for AI agents.
+Documentation for AgentSystems - the open runtime for AI agents, built with zero-trust principles.
 
 This repository contains documentation for:
 
