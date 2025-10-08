@@ -1,0 +1,30 @@
+---
+title: Supported Frameworks
+description: List of agent frameworks supported by AgentSystems
+---
+
+# Supported Frameworks
+
+Use these frameworks to build agents with `get_model()`:
+
+```python
+from agentsystems_toolkit import get_model
+
+model = get_model("claude-sonnet-4", "langchain", temperature=0)
+```
+
+## Currently Supported
+
+- **LangChain** - Use with LangChain chains and LangGraph
+
+## Planned Support
+
+- OpenAI SDK
+- Anthropic SDK
+- LlamaIndex
+- CrewAI
+- Google ADK
+
+---
+
+**Note:** The framework parameter determines which type of model object is returned.
