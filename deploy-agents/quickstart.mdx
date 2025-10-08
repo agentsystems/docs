@@ -1,6 +1,114 @@
 ---
-title: Deploy Your First Agent
-description: Coming soon
+title: Quickstart
+description: Deploy your first agent to AgentSystems in under 10 minutes
 ---
 
-Coming soon: A guide to deploying your first agent to the AgentSystems platform.
+<Note>
+AgentSystems is an **open agent platform** where agents can be **public or private**. This quickstart deploys a public agent - your agent will be available on Docker Hub for others to pull and run. You can also deploy private agents for your organization - see the next steps after completing this guide.
+</Note>
+
+## Prerequisites
+
+- AgentSystems platform running ([Installation Guide](/getting-started/quickstart))
+- Docker installed and running
+- Docker Hub account (free at [hub.docker.com](https://hub.docker.com))
+
+## Step 1: Get the Template
+
+Go to [github.com/agentsystems/agent-template](https://github.com/agentsystems/agent-template) and click **"Use this template"** → **"Create a new repository"**.
+
+Name it `demo-agent` and clone it:
+
+```bash
+git clone https://github.com/your-org/demo-agent.git
+cd demo-agent
+```
+
+## Step 2: Customize Agent Metadata
+
+Edit `agent.yaml`:
+
+```yaml
+namespace: your-org              # Your GitHub username or organization
+name: demo-agent                 # Your agent name
+version: 0.1.0
+description: "Demo agent that returns historical events for a date and creates a story"
+model_dependencies:
+  - gemma3:1b                    # Keep this - works locally
+```
+
+## Step 3: Build and Push
+
+Log in to Docker Hub:
+
+```bash
+docker login
+```
+
+Build and push (replace `your-org`):
+
+```bash
+docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  -t your-org/demo-agent:0.1.0 \
+  -t your-org/demo-agent:latest \
+  --push \
+  .
+```
+
+This takes 5-10 minutes.
+
+## Step 4: Make Repository Public
+
+<Warning>
+Making your Docker repository public means **anyone can pull and run your agent**. Your agent image will be publicly accessible on Docker Hub.
+</Warning>
+
+1. Go to [hub.docker.com](https://hub.docker.com)
+2. Open your repository: `your-org/demo-agent`
+3. Click **Settings** → **Visibility settings** → Change to **Public** → **Save**
+
+## Step 5: Add Agent to Platform
+
+Open [localhost:3001/configuration/agents](http://localhost:3001/configuration/agents):
+
+- **Name**: `demo-agent`
+- **Repository**: `your-org/demo-agent`
+- **Registry**: `dockerhub_public`
+- **Tag**: `latest`
+- **Egress Allowlist**: Leave blank (no external API calls needed)
+
+Click **"Add Agent"**.
+
+## Step 6: Restart and Test
+
+Navigate to your AgentSystems deployment directory and restart:
+
+```bash
+cd /path/to/agentsystems
+agentsystems restart
+```
+
+Test it:
+
+1. Go to [localhost:3001/agents](http://localhost:3001/agents)
+2. Click on `demo-agent`
+3. Click **"Turn On"**
+4. Click **"Execute"**
+
+You should see historical events and a story!
+
+## What You Built
+
+Your agent is now deployed on the **open AgentSystems platform**.
+
+Your agent:
+- Uses `gemma3:1b` (local model, no API keys needed)
+- Accepts a date and returns historical events
+- Runs in a Docker container
+- Is accessible at `http://localhost:18080/invoke/demo-agent`
+- Is publicly available on Docker Hub for others to use
+
+## Next Steps
+
+**Deploy a Private Agent**: This quickstart deployed a public agent. To keep your agent private for your organization, see [Deploying Private Agents](/deploy-agents/private-agents).
