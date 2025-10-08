@@ -39,6 +39,10 @@ model_dependencies:
 
 ## Step 3: Build and Push
 
+<Warning>
+Docker Hub creates new repositories as **public by default**. Your agent image will be publicly accessible immediately after pushing, allowing anyone to pull and run your agent.
+</Warning>
+
 Log in to Docker Hub:
 
 ```bash
@@ -58,15 +62,15 @@ docker buildx build \
 
 This takes 5-10 minutes.
 
-## Step 4: Make Repository Public
+## Step 4: Verify Repository Visibility
 
-<Warning>
-Making your Docker repository public means **anyone can pull and run your agent**. Your agent image will be publicly accessible on Docker Hub.
-</Warning>
+Confirm your repository is public:
 
 1. Go to [hub.docker.com](https://hub.docker.com)
 2. Open your repository: `your-org/demo-agent`
-3. Click **Settings** → **Visibility settings** → Change to **Public** → **Save**
+3. Check **Settings** → **Visibility settings** shows **Public**
+
+If it shows Private, change it to Public and save.
 
 ## Step 5: Add Agent to Platform
 
