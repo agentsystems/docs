@@ -66,7 +66,8 @@
           {
             "group": "Agent Deployment",
             "pages": [
-              "deploy-agents/quickstart"
+              "deploy-agents/quickstart",
+              "deploy-agents/supported-models"
             ]
           }
         ]
@@ -92,16 +93,6 @@
     "dark": "/logo/dark.png"
   },
   "navbar": {
-    "links": [
-      {
-        "label": "Platform",
-        "href": "https://github.com/agentsystems/agentsystems"
-      },
-      {
-        "label": "Agent Hub",
-        "href": "https://github.com/agentsystems"
-      }
-    ],
     "primary": {
       "type": "github",
       "href": "https://github.com/agentsystems/agentsystems"
