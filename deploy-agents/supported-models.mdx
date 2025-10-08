@@ -1,0 +1,70 @@
+---
+title: Supported Models
+description: List of model IDs supported by AgentSystems
+---
+
+# Supported Models
+
+Use these model IDs in your agent code with `get_model()`:
+
+```python
+from agentsystems_toolkit import get_model
+
+model = get_model("claude-sonnet-4", "langchain", temperature=0)
+```
+
+## Claude (Anthropic)
+
+- `claude-opus-4.1`
+- `claude-opus-4`
+- `claude-sonnet-4`
+- `claude-sonnet-3.7`
+- `claude-3-5-sonnet`
+- `claude-3-5-haiku`
+- `claude-haiku-3`
+
+## GPT (OpenAI)
+
+- `gpt-5`
+- `gpt-5-mini`
+- `gpt-5-nano`
+- `gpt-4.1`
+- `gpt-4o`
+- `gpt-4o-mini`
+- `gpt-4-turbo`
+- `o1`
+- `o1-mini`
+
+## Amazon Nova
+
+- `nova-premier`
+- `nova-pro`
+- `nova-lite`
+- `nova-micro`
+
+## Llama (Meta)
+
+- `llama3.3:70b`
+- `llama3.1:8b`
+- `llama3.2:3b`
+- `llama3.2:1b`
+
+## Gemma (Google)
+
+- `gemma3:4b`
+- `gemma3:1b`
+- `gemma2:2b`
+
+---
+
+## Configuration Required
+
+**Before using any model in your agent**, the platform operator must configure the model connection in the AgentSystems UI:
+
+1. Navigate to **Configuration → Model Connections**
+2. Add the model ID (e.g., `claude-sonnet-4`)
+3. Select hosting provider (Anthropic, OpenAI, Bedrock, Ollama)
+4. Configure authentication (API keys, AWS credentials, etc.)
+5. Enable the connection
+
+Agent builders reference the model ID in code, but the actual hosting provider and credentials are configured by whoever runs the AgentSystems platform.
