@@ -1,6 +1,177 @@
 ---
 title: Deploying Private Agents
-description: Coming soon
+description: Deploy agents using private Docker registries
 ---
 
-A guide to deploying private agents for your organization using private Docker registries.
+<Note>
+Private agents use private repositories to control access to your agent images. You can use private Docker Hub repositories, GitHub Container Registry (GHCR), or Harbor.
+</Note>
+
+## Docker Hub Private Repository
+
+This guide shows how to deploy an agent using a private Docker Hub repository with access tokens.
+
+### Prerequisites
+
+- AgentSystems platform running ([Installation Guide](/getting-started/quickstart))
+- Docker installed and running
+- Docker Hub account (free at [hub.docker.com](https://hub.docker.com))
+
+### Step 1: Get the Template
+
+Go to [github.com/agentsystems/agent-template](https://github.com/agentsystems/agent-template) and click **"Use this template"** → **"Create a new repository"**.
+
+Name it `demo-agent-private` and clone it:
+
+```bash
+git clone https://github.com/your-org/demo-agent-private.git
+cd demo-agent-private
+```
+
+### Step 2: Customize Agent Metadata
+
+Edit `agent.yaml`:
+
+```yaml
+namespace: your-org              # Your GitHub username or organization
+name: demo-agent-private         # Your agent name
+version: 0.1.0
+description: "Private demo agent for AgentSystems"
+model_dependencies:
+  - gemma3:1b                    # Keep this - works locally
+```
+
+### Step 3: Build and Push to Private Repository
+
+Log in to Docker Hub:
+
+```bash
+docker login
+```
+
+Build and push (replace `your-org`):
+
+```bash
+docker buildx build \
+  --platform linux/amd64,linux/arm64 \
+  -t your-org/demo-agent-private:0.1.0 \
+  -t your-org/demo-agent-private:latest \
+  --push \
+  .
+```
+
+This takes 5-10 minutes.
+
+### Step 4: Keep Repository Private
+
+<Note>
+Docker Hub creates new repositories as **public by default**. Make sure to change it to private.
+</Note>
+
+1. Go to [hub.docker.com](https://hub.docker.com)
+2. Open your repository: `your-org/demo-agent-private`
+3. Click **Settings** → **Visibility settings** → Change to **Private** → **Save**
+
+### Step 5: Generate Access Token
+
+Generate a read-only access token for the platform to pull your private image.
+
+<Note>
+Use **read-only tokens with expiration dates** for security. The platform only needs read access to pull images.
+</Note>
+
+**For Personal Repositories:**
+
+1. Go to [Account Settings → Security](https://hub.docker.com/settings/security)
+2. Click **New Access Token**
+3. Token description: `AgentSystems Read Access`
+4. Access permissions: **Read-only**
+5. Set an expiration date (recommended for demos)
+6. Click **Generate**
+7. **Copy the token** (you won't see it again)
+
+**For Organization Repositories:**
+
+1. Go to your organization settings
+2. Navigate to **Access Tokens**
+3. Click **Create Access Token**
+4. Token description: `AgentSystems Read Access`
+5. Access permissions: **Read-only**
+6. Set an expiration date (recommended for demos)
+7. Click **Generate**
+8. **Copy the token** (you won't see it again)
+
+### Step 6: Add Credentials to Platform
+
+Open [localhost:3001/configuration/credentials](http://localhost:3001/configuration/credentials)
+
+Add your Docker Hub username:
+- Click **"Add Credential"**
+- **Name**: `PRIVATE_DOCKERHUB_USERNAME`
+- **Value**: Your Docker Hub username
+- Click **Save**
+
+Add your access token:
+- Click **"Add Credential"** again
+- **Name**: `PRIVATE_DOCKERHUB_TOKEN`
+- **Value**: Paste the token from Step 5
+- Click **Save**
+
+### Step 7: Create Registry Connection
+
+Open [localhost:3001/configuration/registries](http://localhost:3001/configuration/registries) and click **"Add Registry"**:
+
+- **Name**: `dockerhub_yourorg_private` (replace `yourorg` with your username/org)
+- **URL**: `docker.io`
+- **Authentication Method**: `Basic (Username/Password)`
+- **Username Environment Variable**: `PRIVATE_DOCKERHUB_USERNAME`
+- **Password Environment Variable**: `PRIVATE_DOCKERHUB_TOKEN`
+- **Enabled**: ✓ (checked)
+
+Click **Save**.
+
+### Step 8: Add Agent to Platform
+
+Open [localhost:3001/configuration/agents](http://localhost:3001/configuration/agents) and click **"Add Agent"**:
+
+- **Name**: `demo-agent-private`
+- **Repository**: `your-org/demo-agent-private`
+- **Registry**: `dockerhub_yourorg_private`
+- **Tag**: `latest`
+- **Egress Allowlist**: Leave blank (no external API calls needed)
+
+Click **"Add Agent"**.
+
+### Step 9: Restart and Test
+
+Navigate to your AgentSystems deployment directory and restart:
+
+```bash
+cd /path/to/agentsystems
+agentsystems restart
+```
+
+Test it:
+
+1. Go to [localhost:3001/agents](http://localhost:3001/agents)
+2. Click on `demo-agent-private`
+3. Click **"Turn On"**
+4. Click **"Execute"**
+
+You should see historical events and a story!
+
+### What You Built
+
+Your private agent is now deployed:
+- Uses a **private Docker Hub repository**
+- Requires credentials to pull and deploy
+- Runs in a Docker container
+- Is accessible at `http://localhost:18080/invoke/demo-agent-private`
+
+## GitHub Container Registry (GHCR)
+
+Coming soon: A guide to deploying private agents using GitHub Container Registry (ghcr.io).
+
+## Harbor
+
+Coming soon: A guide to deploying private agents using Harbor registry.
