@@ -82,23 +82,24 @@ Use **read-only tokens with expiration dates** for security. The platform only n
 
 **For Personal Repositories:**
 
-1. Go to [Account Settings → Security](https://hub.docker.com/settings/security)
-2. Click **New Access Token**
-3. Token description: `AgentSystems Read Access`
-4. Access permissions: **Read-only**
+1. Go to Settings
+2. Click **Personal access tokens**
+3. Click **Generate new token**
+4. Access token description: `AgentSystems Read Access`
 5. Set an expiration date (recommended for demos)
-6. Click **Generate**
-7. **Copy the token** (you won't see it again)
+6. Access permissions: **Read-only**
+7. Click **Generate**
+8. **Copy the token** (you won't see it again)
 
 **For Organization Repositories:**
 
 1. Go to your organization settings
-2. Navigate to **Access Tokens**
-3. Click **Create Access Token**
-4. Token description: `AgentSystems Read Access`
-5. Access permissions: **Read-only**
-6. Set an expiration date (recommended for demos)
-7. Click **Generate**
+2. Navigate to **Access tokens**
+3. Click **Generate access token**
+4. Label: `AgentSystems Image Pull Access`
+5. Set an expiration date (recommended for demos)
+6. Give the token the Image Pull scope for the necessary repository
+7. Click **Generate token**
 8. **Copy the token** (you won't see it again)
 
 ### Step 6: Add Credentials to Platform
