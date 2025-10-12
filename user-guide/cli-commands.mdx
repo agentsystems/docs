@@ -128,6 +128,78 @@ agentsystems artifacts-path abc123-def456 data.csv --input
 ```
 
 
+## Hub Commands
+
+Manage your agents on the AgentSystems Hub:
+
+<Tabs>
+  <Tab title="Login">
+    ```bash
+    # Login to AgentSystems Hub
+    agentsystems hub login
+    ```
+
+    Opens browser for authentication and stores API key locally.
+  </Tab>
+
+  <Tab title="List Agents">
+    ```bash
+    # List all your agents
+    agentsystems hub list
+    ```
+
+    Shows all agents you've published to the hub.
+  </Tab>
+
+  <Tab title="Publish Agent">
+    ```bash
+    # Publish from current directory
+    agentsystems hub publish
+
+    # Publish as listed (public)
+    agentsystems hub publish --listed
+
+    # Publish from specific directory
+    agentsystems hub publish /path/to/agent
+    ```
+
+    Publishes agent to the hub. Agents are unlisted (private) by default.
+  </Tab>
+
+  <Tab title="Delete Agent">
+    ```bash
+    # Delete an agent
+    agentsystems hub delete your-org/demo-agent
+    ```
+
+    Permanently removes an agent from the hub.
+  </Tab>
+
+  <Tab title="Allow Listed Agents">
+    ```bash
+    # Enable listed (public) agents
+    agentsystems hub allow-listed --enable
+
+    # Disable listed agents, keep existing as-is
+    agentsystems hub allow-listed --disable --preserve
+
+    # Disable listed agents, unlist all existing
+    agentsystems hub allow-listed --disable --cascade
+    ```
+
+    Controls whether you can publish agents as listed (public) on the hub.
+  </Tab>
+
+  <Tab title="Logout">
+    ```bash
+    # Logout from AgentSystems Hub
+    agentsystems hub logout
+    ```
+
+    Removes stored API key from local machine.
+  </Tab>
+</Tabs>
+
 ## System Maintenance
 
 Manage platform resources and updates:
@@ -174,6 +246,17 @@ Manage platform resources and updates:
 | `agentsystems update` | Update platform images |
 | `agentsystems version` | Show SDK version |
 | `agentsystems info` | Show diagnostics |
+
+### Hub Commands
+
+| Command | Description |
+|---------|-------------|
+| `agentsystems hub login` | Login to AgentSystems Hub |
+| `agentsystems hub logout` | Logout from AgentSystems Hub |
+| `agentsystems hub list` | List your published agents |
+| `agentsystems hub publish` | Publish agent to the hub |
+| `agentsystems hub delete` | Delete agent from the hub |
+| `agentsystems hub allow-listed` | Enable/disable listed agents |
 
 
 ## Command Alias
