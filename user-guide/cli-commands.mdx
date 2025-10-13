@@ -128,15 +128,15 @@ agentsystems artifacts-path abc123-def456 data.csv --input
 ```
 
 
-## Hub Commands
+## Index Commands
 
-Manage your agents on the AgentSystems Hub:
+Manage your agents on the AgentSystems Index:
 
 <Tabs>
   <Tab title="Login">
     ```bash
-    # Login to AgentSystems Hub
-    agentsystems hub login
+    # Login to AgentSystems Index
+    agentsystems index login
     ```
 
     Opens browser for authentication and stores API key locally.
@@ -145,55 +145,55 @@ Manage your agents on the AgentSystems Hub:
   <Tab title="List Agents">
     ```bash
     # List all your agents
-    agentsystems hub list
+    agentsystems index list
     ```
 
-    Shows all agents you've published to the hub.
+    Shows all agents you've published to the index.
   </Tab>
 
   <Tab title="Publish Agent">
     ```bash
     # Publish from current directory
-    agentsystems hub publish
+    agentsystems index publish
 
     # Publish as listed (public)
-    agentsystems hub publish --listed
+    agentsystems index publish --listed
 
     # Publish from specific directory
-    agentsystems hub publish /path/to/agent
+    agentsystems index publish /path/to/agent
     ```
 
-    Publishes agent to the hub. Agents are unlisted (private) by default.
+    Publishes agent to the index. Agents are unlisted (private) by default.
   </Tab>
 
   <Tab title="Delete Agent">
     ```bash
     # Delete an agent
-    agentsystems hub delete your-org/demo-agent
+    agentsystems index delete your-org/demo-agent
     ```
 
-    Permanently removes an agent from the hub.
+    Permanently removes an agent from the index.
   </Tab>
 
   <Tab title="Allow Listed Agents">
     ```bash
     # Enable listed (public) agents
-    agentsystems hub allow-listed --enable
+    agentsystems index allow-listed --enable
 
     # Disable listed agents, keep existing as-is
-    agentsystems hub allow-listed --disable --preserve
+    agentsystems index allow-listed --disable --preserve
 
     # Disable listed agents, unlist all existing
-    agentsystems hub allow-listed --disable --cascade
+    agentsystems index allow-listed --disable --cascade
     ```
 
-    Controls whether you can publish agents as listed (public) on the hub.
+    Controls whether you can publish agents as listed (public) on the index.
   </Tab>
 
   <Tab title="Logout">
     ```bash
-    # Logout from AgentSystems Hub
-    agentsystems hub logout
+    # Logout from AgentSystems Index
+    agentsystems index logout
     ```
 
     Removes stored API key from local machine.
@@ -247,16 +247,16 @@ Manage platform resources and updates:
 | `agentsystems version` | Show SDK version |
 | `agentsystems info` | Show diagnostics |
 
-### Hub Commands
+### Index Commands
 
 | Command | Description |
 |---------|-------------|
-| `agentsystems hub login` | Login to AgentSystems Hub |
-| `agentsystems hub logout` | Logout from AgentSystems Hub |
-| `agentsystems hub list` | List your published agents |
-| `agentsystems hub publish` | Publish agent to the hub |
-| `agentsystems hub delete` | Delete agent from the hub |
-| `agentsystems hub allow-listed` | Enable/disable listed agents |
+| `agentsystems index login` | Login to AgentSystems Index |
+| `agentsystems index logout` | Logout from AgentSystems Index |
+| `agentsystems index list` | List your published agents |
+| `agentsystems index publish` | Publish agent to the index |
+| `agentsystems index delete` | Delete agent from the index |
+| `agentsystems index allow-listed` | Enable/disable listed agents |
 
 
 ## Command Alias
