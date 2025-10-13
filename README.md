@@ -57,7 +57,7 @@ docs/
 │   ├── running-agents.mdx         # Execute Agents via UI
 │   ├── artifacts.mdx              # Artifacts & File I/O
 │   ├── audit-logs.mdx             # Hash-Chained Audit Trail
-│   └── agent-hub.mdx              # Future Agent Discovery Platform
+│   └── agent-index.mdx            # Future Agent Discovery Platform
 │
 └── 🚀 Deploy Agents (1 page)
     └── quickstart.mdx             # Coming Soon
