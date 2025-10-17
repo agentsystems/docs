@@ -67,6 +67,7 @@
             "group": "Agent Deployment",
             "pages": [
               "deploy-agents/quickstart",
+              "deploy-agents/list-on-index",
               "deploy-agents/private-agents",
               "deploy-agents/supported-models",
               "deploy-agents/supported-frameworks"
