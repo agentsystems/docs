@@ -15,12 +15,13 @@ Publishing metadata to the agent index makes your agent **discoverable** in the 
 
 ## Overview
 
-The [agent-index repository](https://github.com/agentsystems/agent-index) is a decentralized, Git-based registry for agent metadata. Instead of a centralized API:
+The [agent-index repository](https://github.com/agentsystems/agent-index) is an open-source, Git-based registry for agent metadata enabling federated discovery. Instead of a centralized API:
 
 - Developers manage their own YAML files in `developers/your-username/`
-- Pull requests are automatically validated and merged
+- Pull requests are automatically validated and merged—no manual approval needed
 - Metadata is published to `https://agentsystems.github.io/agent-index/`
-- The AgentSystems UI consumes this index for agent discovery
+- The AgentSystems UI consumes this index (and can connect to multiple indexes)
+- Anyone can fork the repository and run their own independent index
 
 **Disclaimer**: Inclusion in the index does not constitute endorsement. The index provides metadata submitted by developers and does not verify agent quality, functionality, or security.
 
