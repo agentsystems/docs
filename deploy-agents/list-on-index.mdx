@@ -54,8 +54,8 @@ Edit `developers/your-username/profile.yaml`:
 
 ```yaml
 name: Your Name or Company
-github_username: your-username  # Must match folder name
-type: individual                # individual, organization, company, or enterprise
+developer: your-username  # Must match folder name
+type: individual          # individual, organization, company, or enterprise
 bio: Developer of AI agents for...
 website: https://example.com
 support_email: hello@example.com
@@ -76,7 +76,7 @@ open_to_collaboration: true
 
 **Required**:
 - `name` (string): Display name
-- `github_username` (string): Must match folder name
+- `developer` (string): Developer namespace - must match folder name
 
 **Optional**:
 - `type` (string): "individual", "organization", "company", or "enterprise"
@@ -263,7 +263,7 @@ The index uses **fork-based ownership**:
 
 Common issues:
 - **Syntax error**: Check YAML indentation (use spaces, not tabs)
-- **Missing required field**: Ensure `name`, `github_username`, `developer`, `version`, `description`, and `model_dependencies` are present
+- **Missing required field**: Ensure `name`, `developer` (in profile.yaml), `version`, `description`, and `model_dependencies` are present
 - **Invalid value**: Check enum fields like `readiness_level` and `listing_status`
 
 Run `python scripts/validate.py all` locally to see detailed error messages.
