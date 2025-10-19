@@ -127,79 +127,6 @@ agentsystems artifacts-path abc123-def456 --input
 agentsystems artifacts-path abc123-def456 data.csv --input
 ```
 
-
-## Index Commands
-
-Manage your agents on the AgentSystems Index:
-
-<Tabs>
-  <Tab title="Login">
-    ```bash
-    # Login to AgentSystems Index
-    agentsystems index login
-    ```
-
-    Opens browser for authentication and stores API key locally.
-  </Tab>
-
-  <Tab title="List Agents">
-    ```bash
-    # List all your agents
-    agentsystems index list
-    ```
-
-    Shows all agents you've published to the index.
-  </Tab>
-
-  <Tab title="Publish Agent">
-    ```bash
-    # Publish from current directory
-    agentsystems index publish
-
-    # Publish as listed (public)
-    agentsystems index publish --listed
-
-    # Publish from specific directory
-    agentsystems index publish /path/to/agent
-    ```
-
-    Publishes agent to the index. Agents are unlisted (private) by default.
-  </Tab>
-
-  <Tab title="Delete Agent">
-    ```bash
-    # Delete an agent
-    agentsystems index delete your-org/demo-agent
-    ```
-
-    Permanently removes an agent from the index.
-  </Tab>
-
-  <Tab title="Allow Listed Agents">
-    ```bash
-    # Enable listed (public) agents
-    agentsystems index allow-listed --enable
-
-    # Disable listed agents, keep existing as-is
-    agentsystems index allow-listed --disable --preserve
-
-    # Disable listed agents, unlist all existing
-    agentsystems index allow-listed --disable --cascade
-    ```
-
-    Controls whether you can publish agents as listed (public) on the index.
-  </Tab>
-
-  <Tab title="Logout">
-    ```bash
-    # Logout from AgentSystems Index
-    agentsystems index logout
-    ```
-
-    Removes stored API key from local machine.
-  </Tab>
-</Tabs>
-
 ## System Maintenance
 
 Manage platform resources and updates:
@@ -246,18 +173,6 @@ Manage platform resources and updates:
 | `agentsystems update` | Update platform images |
 | `agentsystems version` | Show SDK version |
 | `agentsystems info` | Show diagnostics |
-
-### Index Commands
-
-| Command | Description |
-|---------|-------------|
-| `agentsystems index login` | Login to AgentSystems Index |
-| `agentsystems index logout` | Logout from AgentSystems Index |
-| `agentsystems index list` | List your published agents |
-| `agentsystems index publish` | Publish agent to the index |
-| `agentsystems index delete` | Delete agent from the index |
-| `agentsystems index allow-listed` | Enable/disable listed agents |
-
 
 ## Command Alias
 

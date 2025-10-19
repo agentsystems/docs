@@ -1,24 +1,33 @@
 ---
-title: Agents
+title: Agent Connections
 description: Deploy and configure agents
 ---
 
 
-Agents are containerized AI applications that process requests using configured model connections. This page covers how to deploy and configure agents.
+Agents are containerized AI applications that process requests using configured model connections.
+
+## Ways to Add Agents
+
+There are two ways to add agents to your deployment:
+
+1. **Via Index Connections**: Navigate to **[Index Connections](/configuration/index-connections)** to connect to community agent indexes, then browse and add agents from the **Discover** page
+2. **Direct Configuration**: Manually configure agent connections when you know the exact container image details
 
 <Warning>
-Before deploying agents, you need:
+Before manually configuring agents on this page, you need:
 1. [Model connections](/configuration/model-connections) configured for AI providers
 2. [Registry connections](/configuration/registry-connections) for pulling agent images
 </Warning>
 
 ## Managing via UI
 
-Navigate to **Configuration → Agents** in the AgentSystems UI at http://localhost:3001.
+Navigate to **Configuration → Agent Connections** in the AgentSystems UI at http://localhost:3001.
 
 The UI allows you to:
-- Configure agent settings
-- Enable/disable agents
+- Manually configure agent deployments from known container images
+- Edit agent settings and egress controls
+- Remove agent connections
+
 
 ## Agent Configuration
 
@@ -44,8 +53,6 @@ agents:
       - "https://api.example.com/*"
       - "https://data.provider.com/v1/*"
 ```
-
-By default, outbound requests are limited to specified URL patterns.
 
 ## Manual Configuration
 
@@ -81,10 +88,10 @@ agentsystems restart
 
 <Steps>
   <Step title="Deployment">
-    When you add an agent to configuration, AgentSystems:
-    - Pulls the image from the specified registry
-    - Creates a Docker container with proper labels
-    - Configures networking and volumes
+    When you add an agent to configuration:
+    - The image is pulled from the specified registry
+    - A Docker container is created with labels
+    - Networking and volumes are configured
   </Step>
 
   <Step title="Discovery">
@@ -94,8 +101,7 @@ agentsystems restart
   </Step>
 
   <Step title="Idle Management">
-    Agents by default stop after ~15 minutes of inactivity to save resources.
-    They typically restart on the next request (configurable).
+    Agents may stop after periods of inactivity to save resources.
   </Step>
 </Steps>
 

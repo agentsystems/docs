@@ -33,13 +33,24 @@
         "tab": "Configuration",
         "groups": [
           {
-            "group": "Setup",
+            "group": "Overview",
             "pages": [
-              "configuration/index",
-              "configuration/credentials",
+              "configuration/index"
+            ]
+          },
+          {
+            "group": "Connections",
+            "pages": [
               "configuration/model-connections",
+              "configuration/index-connections",
               "configuration/registry-connections",
-              "configuration/agents"
+              "configuration/agent-connections"
+            ]
+          },
+          {
+            "group": "System",
+            "pages": [
+              "configuration/credentials"
             ]
           }
         ]
@@ -48,13 +59,23 @@
         "tab": "User Guide",
         "groups": [
           {
-            "group": "Using AgentSystems",
+            "group": "Basics",
             "pages": [
               "user-guide/cli-commands",
               "user-guide/running-agents",
+              "user-guide/agent-index"
+            ]
+          },
+          {
+            "group": "Features",
+            "pages": [
               "user-guide/artifacts",
-              "user-guide/audit-logs",
-              "user-guide/agent-index",
+              "user-guide/audit-logs"
+            ]
+          },
+          {
+            "group": "Troubleshooting",
+            "pages": [
               "user-guide/troubleshooting"
             ]
           }
@@ -64,11 +85,21 @@
         "tab": "Deploy Agents",
         "groups": [
           {
-            "group": "Agent Deployment",
+            "group": "Deployment",
             "pages": [
               "deploy-agents/quickstart",
-              "deploy-agents/list-on-index",
-              "deploy-agents/private-agents",
+              "deploy-agents/private-agents"
+            ]
+          },
+          {
+            "group": "Distribution",
+            "pages": [
+              "deploy-agents/list-on-index"
+            ]
+          },
+          {
+            "group": "Reference",
+            "pages": [
               "deploy-agents/supported-models",
               "deploy-agents/supported-frameworks"
             ]
