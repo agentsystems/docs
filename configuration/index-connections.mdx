@@ -1,0 +1,110 @@
+---
+title: Index Connections
+description: Discover community agents from public indexes
+---
+
+
+Index connections allow AgentSystems to discover and browse community agents from public agent indexes. Connect to multiple indexes to expand your agent library.
+
+<Info>
+AgentSystems does not review or endorse software in any index.
+</Info>
+
+## Managing via UI
+
+Navigate to **Configuration → Index Connections** in the AgentSystems UI at http://localhost:3001.
+
+The UI allows you to:
+- Add public agent indexes
+- Enable/disable index connections
+- Browse agents from enabled indexes on the Discover page
+
+
+## Configuration Structure
+
+Each index connection requires:
+
+| Field | Description | Required |
+|-------|-------------|----------|
+| `name` | Unique identifier (lowercase, numbers, hyphens, underscores) | Yes |
+| `url` | Index API URL (must be http:// or https://) | Yes |
+| `enabled` | Whether this index is active | Yes |
+| `description` | Human-readable description | No |
+
+## Manual Configuration
+
+Edit `agentsystems-config.yml` directly:
+
+```yaml
+config_version: 1
+
+index_connections:
+  # AgentSystems community index
+  agentsystems-community:
+    url: https://agentsystems.github.io/agent-index
+    enabled: true
+    description: AgentSystems community index
+
+  # Custom company index
+  mycompany-index:
+    url: https://index.mycompany.com
+    enabled: true
+    description: Internal agent catalog
+```
+
+After editing, restart the platform:
+```bash
+agentsystems restart
+```
+
+## Index Structure
+
+Agent indexes may provide:
+
+- Agent metadata (name, description, developer)
+- Container image location and tag
+- Model requirements
+- Egress allowlist
+- Additional metadata
+
+## Enabling an Index
+
+<Warning>
+When enabling an index, you acknowledge that this third-party software has not been reviewed or endorsed by AgentSystems.
+</Warning>
+
+<Steps>
+  <Step title="Add Index Connection">
+    Provide the index URL and a unique name for the connection.
+  </Step>
+
+  <Step title="Enable Connection">
+    Check the "Enabled" checkbox and acknowledge the community software disclaimer.
+  </Step>
+
+  <Step title="Browse Agents">
+    Navigate to **Discover** to browse and add agents from enabled indexes.
+  </Step>
+</Steps>
+
+## Disabling an Index
+
+Disabling an index connection will:
+- Hide agents from that index on the Discover page
+- Not affect already-deployed agents from that index
+- Allow you to re-enable the connection at any time
+
+## Index Security
+
+<AccordionGroup>
+  <Accordion title="Third-Party Software">
+    AgentSystems does not review or endorse software in any index.
+  </Accordion>
+
+  <Accordion title="Re-Acknowledgement">
+    If you change an index URL while it's enabled, you must re-acknowledge that this third-party software has not been reviewed or endorsed by AgentSystems.
+  </Accordion>
+
+</AccordionGroup>
+
+

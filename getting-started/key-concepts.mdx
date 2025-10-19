@@ -13,10 +13,10 @@ AgentSystems consists of several interconnected components that work together as
 
     The gateway is the central orchestration layer that:
     - Discovers agent containers via Docker labels
-    - Routes requests to appropriate agents
-    - Manages container lifecycle (start/stop)
+    - Routes requests to agents
+    - Handles container lifecycle operations
     - Routes requests via HTTP proxy
-    - Logs operations with hash-chaining
+    - Logs operations to database
 
     Runs on port 18080 (external) / 8080 (internal)
   </Tab>
@@ -62,15 +62,15 @@ AgentSystems consists of several interconnected components that work together as
   </Step>
 
   <Step title="Gateway Processing">
-    Control plane receives request, generates thread ID, and logs to audit trail
+    Control plane receives request, generates thread ID, and logs to database
   </Step>
 
   <Step title="Agent Discovery">
-    Gateway finds target agent container via Docker labels (`agent.enabled=true`)
+    Gateway locates target agent container via Docker labels (`agent.enabled=true`)
   </Step>
 
   <Step title="Container Management">
-    If agent is stopped, gateway automatically starts the container
+    Gateway attempts to start the container if needed
   </Step>
 
   <Step title="Request Forwarding">
@@ -82,7 +82,7 @@ AgentSystems consists of several interconnected components that work together as
   </Step>
 
   <Step title="Response Return">
-    Agent returns response, gateway logs completion, and client receives results
+    Agent returns response, gateway logs completion, and results are returned
   </Step>
 </Steps>
 
@@ -133,28 +133,18 @@ Configuration changes made in the UI are written to these files and take effect 
 ## System Architecture
 
 <Accordion title="Container Isolation">
-Each agent runs in a separate Docker container with:
-- Resource limits
-- Network isolation
-- Filesystem boundaries
-- Runs in separate containers
+Each agent runs in a separate Docker container.
 </Accordion>
 
 <Accordion title="Credential Management">
-- API keys stored in environment variables
-- Credentials managed separately from agent containers
-- Deployment-specific credential isolation
+API keys are stored in environment variables separate from agent containers.
 </Accordion>
 
 <Accordion title="Audit Trail">
-- Operations logged to PostgreSQL
-- Hash-chaining of log entries
-- Request/response tracking
+Operations are logged to PostgreSQL with request/response tracking.
 </Accordion>
 
 <Accordion title="Egress Control">
-- HTTP proxy for URL allowlist configuration
-- Per-agent network policies
-- Configurable outbound request policies
+HTTP proxy configuration supports URL allowlist functionality.
 </Accordion>
 
