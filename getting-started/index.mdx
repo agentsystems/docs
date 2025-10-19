@@ -5,23 +5,27 @@ description: The open platform for AI agents
 
 ## The Open Platform for AI Agents
 
-AgentSystems lets you run community and commercial AI agents in any cloud or on your own hardware. Container isolation and egress controls constrain what agents can do.
+AgentSystems lets you run community and commercial AI agents in any cloud or on your own hardware. Browse agents from community indexes or configure agents directly.
 
 <Info>
-**What is AgentSystems?** An open platform that runs AI agents in Docker containers, supports multiple AI providers, and includes audit logging capabilities. Deploy on your infrastructure or in your cloud.
+**What is AgentSystems?** An open platform that runs AI agents in Docker containers, supports multiple AI providers, and provides audit logging. Deploy on your infrastructure or in your cloud.
 </Info>
 
 ## Why Use an Open Platform for AI Agents?
 
-Stop sending your data to AI services. Run agents on your own machines or in your own cloud:
+Run agents on your own machines or in your own cloud:
 - **Data Sovereignty**: Process data on your infrastructure
 - **Provider Flexibility**: OpenAI, Anthropic, AWS Bedrock, or local models via Ollama
 - **Cost Control**: Use your hardware and API keys directly
-- **Audit Trail**: Hash-chained logging for operation tracking
+- **Audit Logging**: Operation logging to PostgreSQL
 
 ## Key Capabilities
 
 <Columns cols={2}>
+  <Card title="Community Indexes" icon="globe">
+    Browse and add agents from community indexes
+  </Card>
+
   <Card title="Local Execution" icon="server">
     Deploy AI agents on your hardware with Docker
   </Card>
@@ -30,12 +34,8 @@ Stop sending your data to AI services. Run agents on your own machines or in you
     Use OpenAI, Anthropic, AWS Bedrock, or local models
   </Card>
 
-  <Card title="Container Architecture" icon="shield">
-    Each agent runs in a Docker container
-  </Card>
-
   <Card title="Audit Logging" icon="file-signature">
-    Hash-chained logs are designed to make post-hoc changes easier to detect
+    Operation logging to PostgreSQL database
   </Card>
 </Columns>
 
