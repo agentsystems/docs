@@ -124,9 +124,9 @@ description: "Brief description of what your agent does"
 model_dependencies:
   - gemma3:1b                   # Required AI models
 
-# Image repository (if public)
-image_repository_url: docker.io/your-username/your-agent:0.1.0
-image_repository_access: public  # public or private
+# Container image (if public)
+container_image: docker.io/your-username/your-agent:0.1.0
+container_image_access: public  # public or private
 
 # Source repository (if public)
 source_repository_url: https://github.com/your-username/your-agent
@@ -136,7 +136,7 @@ source_repository_access: public
 context: general                # Context: code, data, general, etc.
 primary_function: research      # Primary function category
 readiness_level: beta           # experimental, beta, production, deprecated
-listing_status: published       # published, unlisted, archived
+listing_status: listed          # listed or unlisted
 
 # Capabilities
 capabilities:
@@ -163,9 +163,9 @@ tags:
 - `context` (string): Operating context
 - `primary_function` (string): Primary function category
 - `readiness_level` (string): "experimental", "beta", "production", or "deprecated"
-- `listing_status` (string): "published", "unlisted", or "archived"
-- `image_repository_url` (string): Docker image URL
-- `image_repository_access` (string): "public" or "private"
+- `listing_status` (string): "listed" or "unlisted"
+- `container_image` (string): Container image reference (e.g., docker.io/user/agent)
+- `container_image_access` (string): "public" or "private"
 - `source_repository_url` (string): Source code URL
 - `source_repository_access` (string): "public" or "private"
 - `required_egress` (array): Required network egress URLs
