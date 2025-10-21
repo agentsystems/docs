@@ -26,13 +26,19 @@ cd demo-agent
 
 ## Step 2: Customize Agent Metadata
 
-Edit `agent.yaml`:
+Edit `agent.yaml` (agent identity):
 
 ```yaml
-developer: your-org              # Your AgentSystems developer identity (lowercase, letters/numbers/hyphens/underscores)
+developer: your-org              # Your AgentSystems developer identity
 name: demo-agent                 # Your agent name
-version: 0.1.0
 description: "Demo agent that returns historical events for a date and creates a story"
+container_image: your-org/demo-agent  # Your Docker Hub repository
+```
+
+Edit `metadata.yaml` (version-specific attributes):
+
+```yaml
+version: "0.1.0"                 # Your version number
 model_dependencies:
   - gemma3:1b                    # Keep this - works locally
 ```
