@@ -110,105 +110,153 @@ mkdir -p developers/your-username/agents
 Copy the example agent:
 
 ```bash
-cp examples/agents/demo-agent.yaml developers/your-username/agents/your-agent.yaml
+# Create your agent directory
+mkdir -p developers/your-username/agents/your-agent
+
+# Copy example files
+cp examples/agents/demo-agent/agent.yaml developers/your-username/agents/your-agent/
+cp examples/agents/demo-agent/versions.yaml developers/your-username/agents/your-agent/
+cp examples/agents/demo-agent/0.1.0.yaml developers/your-username/agents/your-agent/
 ```
 
-Edit `developers/your-username/agents/your-agent.yaml`:
+The directory structure will be:
+```
+developers/your-username/agents/your-agent/
+  agent.yaml      # Agent identity (who/what it is)
+  versions.yaml   # Version management (which versions)
+  0.1.0.yaml     # Version specification (how it behaves)
+```
+
+Edit `developers/your-username/agents/your-agent/agent.yaml` (identity):
 
 ```yaml
-name: your-agent                # Lowercase, alphanumeric, hyphens only
 developer: your-username        # Must match folder name
+name: your-agent                # Must match directory name
 description: "Brief description of what your agent does"
 
-# Container image (without tag)
+# Container image (without tag - version will be auto-derived)
 container_image: docker.io/your-username/your-agent
-container_image_access: public  # public or private
 
-# Source repository (if public)
+# Source repository (optional)
 source_repository_url: https://github.com/your-username/your-agent
-source_repository_access: public
 
-# Default metadata (can be overridden per version)
-context: general                # Context: code, data, general, etc.
-primary_function: research      # Primary function category
-listing_status: listed          # listed or unlisted
-
-# Capabilities
-capabilities:
-  - Historical research
-  - Story generation
-  - Date parsing
+# High-level discovery metadata
+primary_function: research      # research | create | process | monitor | automate | analyze
 
 tags:
   - history
   - storytelling
   - research
 
-# Versions (required - at least one version)
-versions:
-  - version: "0.1.0"            # Semantic version (x.y.z or x.y.z-beta.1), used as container tag
-    is_latest: true             # Exactly one version must be true
-    listing_status: listed      # Override default if needed
-    readiness_level: beta       # experimental, beta, production, deprecated
+capabilities:
+  - Historical research
+  - Story generation
+  - Date parsing
+```
 
-    model_dependencies:         # Required for each version
-      - gemma3:1b
+Edit `developers/your-username/agents/your-agent/versions.yaml` (version management):
 
-    input_schema:               # Optional: version-specific parameters
-      query:
-        type: string
-        required: true
-        description: Your input parameter
+```yaml
+latest_version: "0.1.0"      # Latest/default version
 
-    release_notes: |            # Optional: markdown release notes
-      ## Initial Release
+listed_versions:     # Versions visible in discovery
+  - "0.1.0"
+```
 
-      First public release with basic features.
+Edit `developers/your-username/agents/your-agent/0.1.0.yaml` (version spec):
+
+```yaml
+version: "0.1.0"     # Must match filename (0.1.0.yaml)
+
+# Maturity
+readiness_level: beta       # experimental | beta | production | deprecated
+
+# Access
+container_image_access: public      # public or private
+source_repository_access: public    # public or private
+
+# Dependencies
+model_dependencies:
+  - gemma3:1b
+
+# I/O Specification
+input_types:
+  - type: text
+    mime_types: [text/plain]
+
+output_types:
+  - type: text
+    mime_types: [text/plain]
+
+input_schema:
+  query:
+    type: string
+    required: true
+    description: Your input parameter
+
+# Behavioral characteristics
+facets:
+  context: general          # personal | professional | general
+  autonomy: Co-pilot        # Assist | Co-pilot | Auto-pilot
+  latency: interactive      # real-time | interactive | batch
+  cost_profile: free        # free | $/task | $/month
+  modalities: [text]        # text | image | audio | video
+  domains: [text]           # Application domains
+  model_tooling: [LLM]      # LLM | RAG | fine-tuned | embeddings
+
+release_notes: |
+  ## Initial Release
+
+  First public release with basic features.
 ```
 
 <Accordion title="Complete Agent Metadata Schema">
 
-**Required (root level)**:
+**Required in agent.yaml (Agent Identity)**:
 - `name` (string): Agent name (lowercase, alphanumeric, hyphens)
-- `developer` (string): Your GitHub username
+- `developer` (string): Your GitHub username (must match folder name)
 - `description` (string): Short description
 - `container_image` (string): Container image reference without tag (e.g., docker.io/user/agent)
-- `versions` (array): Array of version objects (at least one required)
 
-**Required (in each version object)**:
+**Optional in agent.yaml (Agent Identity)**:
+- `source_repository_url` (string): Source code URL
+- `primary_function` (string): Primary function category
+- `tags` (array): Searchable tags
+- `capabilities` (array): High-level capability descriptions
+
+**Required in versions.yaml (Version Management)**:
+- `latest_version` (string): Latest version (must match an existing {version}.yaml file)
+- `listed_versions` (array): Versions visible in discovery (each must match an existing {version}.yaml file)
+
+**Required in {version}.yaml files (Version Specification)**:
 - `version` (string): Semantic version (e.g., "0.1.0" or "1.0.0-beta.1"), used as container image tag
-- `is_latest` (boolean): Exactly one version must be true
 - `model_dependencies` (array): Required AI models (at least one)
 
-**Optional (root level - defaults for all versions)**:
-- `context` (string): Operating context
-- `primary_function` (string): Primary function category
-- `listing_status` (string): "listed" or "unlisted"
+**Optional in {version}.yaml files**:
+- `readiness_level` (string): "experimental", "beta", "production", or "deprecated"
 - `container_image_access` (string): "public" or "private"
-- `source_repository_url` (string): Source code URL
 - `source_repository_access` (string): "public" or "private"
-- `tags` (array): Searchable tags
-- `capabilities` (array): Agent capabilities
-- `facets` (object): Flexible categorization metadata
-  - `latency` (string): Latency profile
-  - `cost_profile` (string): Cost profile
+- `required_egress` (array): Required network egress URLs
+- `required_integrations` (array): Required external integrations
+- `input_types` (array): Supported input data types
+- `output_types` (array): Supported output data types
+- `input_schema` (object): Input parameter schema
+- `facets` (object): Behavioral characteristics and categorization
+  - `context` (string): Operating context (personal, professional, general)
+  - `autonomy` (string): Autonomy level (Assist, Co-pilot, Auto-pilot)
+  - `latency` (string): Latency profile (real-time, interactive, batch)
+  - `cost_profile` (string): Cost model (free, $/task, $/month)
+  - `modalities` (array): Supported modalities (text, image, audio, video)
   - `domains` (array): Application domains
-  - `modalities` (array): Supported modalities (text, image, audio, etc.)
-  - `model_tooling` (array): Model frameworks used
+  - `model_tooling` (array): Model frameworks (LLM, RAG, fine-tuned, embeddings)
   - `industries` (array): Target industries
   - `integrations` (array): Supported integrations
-
-**Optional (version level - can override defaults)**:
-- `listing_status` (string): Override default listing for this version
-- `readiness_level` (string): "experimental", "beta", "production", or "deprecated"
-- `container_image_access` (string): Override default access
-- `required_egress` (array): Required network egress URLs
-- `input_schema` (object): Input parameter schema for this version
-- `description` (string): Version-specific description override
-- `capabilities` (array): Version-specific capabilities override
 - `release_notes` (string): Markdown-formatted release notes
 
-See the [agent schema](https://github.com/agentsystems/agent-index/blob/main/schema/agent.schema.json) for complete details.
+See the schemas for complete details:
+- [agent-identity.schema.json](https://github.com/agentsystems/agent-index/blob/main/schema/agent-identity.schema.json) - agent.yaml
+- [versions.schema.json](https://github.com/agentsystems/agent-index/blob/main/schema/versions.schema.json) - versions.yaml
+- [agent-version.schema.json](https://github.com/agentsystems/agent-index/blob/main/schema/agent-version.schema.json) - {version}.yaml
 
 </Accordion>
 
@@ -254,14 +302,56 @@ Your PR triggers automated workflows:
 
 Your agent should appear at `https://agentsystems.github.io/agent-index/` shortly after the build completes.
 
-## Updating Your Metadata
+## Publishing New Versions
 
-To update your profile or agent metadata:
+To publish a new version of your agent:
 
-1. Edit your YAML files in `developers/your-username/`
+1. Create a new version file in your agent directory:
+
+```bash
+# Copy your current version as a template
+cp developers/your-username/agents/your-agent/0.1.0.yaml \
+   developers/your-username/agents/your-agent/0.2.0.yaml
+```
+
+2. Edit the new version file:
+   - Update `version: "0.2.0"` (must match filename)
+   - Modify any behavioral changes (model, facets, schema, etc.)
+   - Add release notes
+
+3. Update versions.yaml:
+   - Change `latest_version: "0.1.0"` to `latest_version: "0.2.0"`
+   - Add `"0.2.0"` to `listed_versions` array
+   - Optionally remove old versions from `listed_versions` to hide them
+
+```yaml
+latest_version: "0.2.0"
+
+listed_versions:
+  - "0.1.0"    # Keep if users might want old version
+  - "0.2.0"    # New version
+```
+
+4. Commit and push:
+
+```bash
+git add developers/your-username/agents/your-agent/
+git commit -m "Release 0.2.0 of your-agent"
+git push origin main
+```
+
+**Git diff clarity**: Adding 0.2.0 shows as a clean new file in your PR, making reviews simple and clear.
+
+## Updating Agent Identity
+
+To update your agent's identity (description, tags, capabilities):
+
+1. Edit `developers/your-username/agents/your-agent/agent.yaml`
 2. Commit and push to your fork
 3. Open a new pull request
 4. Auto-merge handles the rest
+
+Note: Identity fields affect all versions. Version-specific changes go in the {version}.yaml files.
 
 ## Security Model
 
@@ -286,7 +376,7 @@ The index uses **fork-based ownership**:
 Common issues:
 - **Syntax error**: Check YAML indentation (use spaces, not tabs)
 - **Missing required field**: Ensure `name`, `developer` (in profile.yaml), `version`, `description`, and `model_dependencies` are present
-- **Invalid value**: Check enum fields like `readiness_level` and `listing_status`
+- **Invalid value**: Check enum fields like `readiness_level`
 
 Run `python scripts/validate.py all` locally to see detailed error messages.
 
