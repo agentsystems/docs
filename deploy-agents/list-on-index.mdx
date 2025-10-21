@@ -9,15 +9,19 @@ Publishing metadata to the agent index makes your agent **discoverable** in the 
 
 ## Prerequisites
 
-- GitHub account
+- GitHub account with commit signing enabled ([Setup Guide](https://docs.github.com/en/authentication/managing-commit-signature-verification))
 - Agent deployed (see [Quickstart](/deploy-agents/quickstart))
 - 5 minutes
+
+<Note>
+**Commit Signing Required**: All commits in your PR must be signed with a verified GPG or SSH key. Unverified commits will be rejected by the auto-merge workflow. This requirement helps verify that commits are cryptographically signed and match the author identity.
+</Note>
 
 ## Overview
 
 The [agent-index repository](https://github.com/agentsystems/agent-index) is an open-source, Git-based registry for agent metadata enabling federated discovery. Instead of a centralized API:
 
-- Developers manage their own YAML files in `developers/your-username/`
+- Developers manage their own YAML files in `developers/your-github-username/`
 - Pull requests are automatically validated and merged—no manual approval needed
 - Metadata is published to `https://agentsystems.github.io/agent-index/`
 - The AgentSystems UI consumes this index (and can connect to multiple indexes)
@@ -32,7 +36,7 @@ Go to [github.com/agentsystems/agent-index](https://github.com/agentsystems/agen
 Clone your fork:
 
 ```bash
-git clone https://github.com/your-username/agent-index.git
+git clone https://github.com/your-github-username/agent-index.git
 cd agent-index
 ```
 
@@ -41,20 +45,20 @@ cd agent-index
 Create your developer folder (must match your GitHub username):
 
 ```bash
-mkdir -p developers/your-username
+mkdir -p developers/your-github-username
 ```
 
 Copy the example profile:
 
 ```bash
-cp examples/profile.yaml developers/your-username/profile.yaml
+cp examples/profile.yaml developers/your-github-username/profile.yaml
 ```
 
-Edit `developers/your-username/profile.yaml`:
+Edit `developers/your-github-username/profile.yaml`:
 
 ```yaml
 name: Your Name or Company
-developer: your-username  # Must match folder name
+developer: your-github-username  # Must match folder name
 type: individual          # individual, organization, company, or enterprise
 bio: Developer of AI agents for...
 website: https://example.com
@@ -104,118 +108,62 @@ open_to_collaboration: true
 Create the agents folder:
 
 ```bash
-mkdir -p developers/your-username/agents
+mkdir -p developers/your-github-username/agents
 ```
 
 Copy the example agent:
 
 ```bash
 # Create your agent directory
-mkdir -p developers/your-username/agents/your-agent
+mkdir -p developers/your-github-username/agents/your-agent
 
 # Copy example files
-cp examples/agents/demo-agent/agent.yaml developers/your-username/agents/your-agent/
-cp examples/agents/demo-agent/versions.yaml developers/your-username/agents/your-agent/
-cp examples/agents/demo-agent/0.1.0.yaml developers/your-username/agents/your-agent/
+cp examples/agents/demo-agent/agent.yaml developers/your-github-username/agents/your-agent/
+cp examples/agents/demo-agent/versions.yaml developers/your-github-username/agents/your-agent/
+cp examples/agents/demo-agent/0.1.0.yaml developers/your-github-username/agents/your-agent/
 ```
 
 <Note>
 **Publishing from agent-template**: If you built an agent using [agent-template](https://github.com/agentsystems/agent-template), copy your files to create the index structure:
-- Copy `agent.yaml` from your agent → `developers/your-username/agents/your-agent/agent.yaml`
-- Copy `metadata.yaml` from your agent → `developers/your-username/agents/your-agent/0.1.0.yaml` (rename to match version)
-- Create `versions.yaml` with `latest_version: "0.1.0"` and `listed_versions: ["0.1.0"]`
+
+- Copy `agent.yaml` from your agent → `developers/your-github-username/agents/your-agent/agent.yaml`
+- Copy `metadata.yaml` from your agent → `developers/your-github-username/agents/your-agent/0.1.0.yaml` (rename to match version)
+- Create `versions.yaml` with:
+
+  ```yaml
+  latest_version: "0.1.0"
+  listed_versions:
+    - "0.1.0"
+  ```
 </Note>
 
 The directory structure will be:
 ```
-developers/your-username/agents/your-agent/
+developers/your-github-username/agents/your-agent/
   agent.yaml      # Agent identity (who/what it is)
   versions.yaml   # Version management (which versions)
   0.1.0.yaml     # Version specification (how it behaves)
 ```
 
-Edit `developers/your-username/agents/your-agent/agent.yaml` (identity):
+Edit the three YAML files:
 
-```yaml
-developer: your-username        # Must match folder name
-name: your-agent                # Must match directory name
-description: "Brief description of what your agent does"
+**`agent.yaml`** - Set your agent identity:
+- `developer` - Must match your GitHub username
+- `name` - Must match directory name
+- `description`, `container_image`, `tags`, `capabilities` - See examples folder for all fields
 
-# Container image (without tag - version will be auto-derived)
-container_image: docker.io/your-username/your-agent
+**`versions.yaml`** - Set version management:
+- `latest_version: "0.1.0"`
+- `listed_versions:` with `- "0.1.0"` (use dash notation)
 
-# Source repository (optional)
-source_repository_url: https://github.com/your-username/your-agent
+**`0.1.0.yaml`** - Set version-specific attributes:
+- `version` - Must match filename ("0.1.0")
+- `model_dependencies:` with `- gemma3:1b` (use dash notation)
+- `readiness_level`, `input_schema`, `facets` - See examples folder for all fields
 
-# High-level discovery metadata
-primary_function: research      # research | create | process | monitor | automate | analyze
-
-tags:
-  - history
-  - storytelling
-  - research
-
-capabilities:
-  - Historical research
-  - Story generation
-  - Date parsing
-```
-
-Edit `developers/your-username/agents/your-agent/versions.yaml` (version management):
-
-```yaml
-latest_version: "0.1.0"      # Latest/default version
-
-listed_versions:     # Versions visible in discovery
-  - "0.1.0"
-```
-
-Edit `developers/your-username/agents/your-agent/0.1.0.yaml` (version spec):
-
-```yaml
-version: "0.1.0"     # Must match filename (0.1.0.yaml)
-
-# Maturity
-readiness_level: beta       # experimental | beta | production | deprecated
-
-# Access
-container_image_access: public      # public or private
-source_repository_access: public    # public or private
-
-# Dependencies
-model_dependencies:
-  - gemma3:1b
-
-# I/O Specification
-input_types:
-  - type: text
-    mime_types: [text/plain]
-
-output_types:
-  - type: text
-    mime_types: [text/plain]
-
-input_schema:
-  query:
-    type: string
-    required: true
-    description: Your input parameter
-
-# Behavioral characteristics
-facets:
-  context: general          # personal | professional | general
-  autonomy: Co-pilot        # Assist | Co-pilot | Auto-pilot
-  latency: interactive      # real-time | interactive | batch
-  cost_profile: free        # free | $/task | $/month
-  modalities: [text]        # text | image | audio | video
-  domains: [text]           # Application domains
-  model_tooling: [LLM]      # LLM | RAG | fine-tuned | embeddings
-
-release_notes: |
-  ## Initial Release
-
-  First public release with basic features.
-```
+<Note>
+See `examples/agents/demo-agent/` in the repository for complete examples of all three files with all available fields and documentation.
+</Note>
 
 <Accordion title="Complete Agent Metadata Schema">
 
@@ -291,8 +239,8 @@ Should output:
 Commit and push:
 
 ```bash
-git add developers/your-username/
-git commit -m "Add your-username profile and your-agent"
+git add developers/your-github-username/
+git commit -m "Add your-github-username profile and your-agent"
 git push origin main
 ```
 
@@ -317,8 +265,8 @@ To publish a new version of your agent:
 
 ```bash
 # Copy your current version as a template
-cp developers/your-username/agents/your-agent/0.1.0.yaml \
-   developers/your-username/agents/your-agent/0.2.0.yaml
+cp developers/your-github-username/agents/your-agent/0.1.0.yaml \
+   developers/your-github-username/agents/your-agent/0.2.0.yaml
 ```
 
 2. Edit the new version file:
@@ -342,7 +290,7 @@ listed_versions:
 4. Commit and push:
 
 ```bash
-git add developers/your-username/agents/your-agent/
+git add developers/your-github-username/agents/your-agent/
 git commit -m "Release 0.2.0 of your-agent"
 git push origin main
 ```
@@ -353,7 +301,7 @@ git push origin main
 
 To update your agent's identity (description, tags, capabilities):
 
-1. Edit `developers/your-username/agents/your-agent/agent.yaml`
+1. Edit `developers/your-github-username/agents/your-agent/agent.yaml`
 2. Commit and push to your fork
 3. Open a new pull request
 4. Auto-merge handles the rest
@@ -364,7 +312,7 @@ Note: Identity fields affect all versions. Version-specific changes go in the {v
 
 The index uses **fork-based ownership**:
 
-- ✅ Only you can modify `developers/your-username/` (checked via fork ownership)
+- ✅ Only you can modify `developers/your-github-username/` (checked via fork ownership)
 - ✅ PRs touching only your folder auto-merge
 - ✅ PRs touching core files require maintainer approval
 - ✅ Multiple validation layers protect the index
@@ -374,9 +322,10 @@ The index uses **fork-based ownership**:
 ### PR not auto-merging
 
 **Check**:
-1. All files are in `developers/your-username/` (folder name must match your GitHub username exactly)
+1. All files are in `developers/your-github-username/` (folder name must match your GitHub username exactly)
 2. YAML validation passes (check the workflow logs)
 3. You're submitting from a fork (not a branch in the main repo)
+4. All commits are signed and verified (see below)
 
 ### YAML validation fails
 
@@ -392,6 +341,26 @@ Run `python scripts/validate.py all` locally to see detailed error messages.
 **Error**: "Developer folder (your-name) does not match PR head repository owner (different-name)"
 
 **Solution**: Your folder name must exactly match your GitHub username. If your fork is under a different account, the folder name must match that account.
+
+### Unverified commits
+
+**Error**: "PR contains unverified commits. All commits must be signed with a verified GPG or SSH key."
+
+**Solution**:
+1. Verify your git config matches your signing key:
+   ```bash
+   git config user.name    # Should match your GitHub username
+   git config user.email   # Should match your signing key email
+   ```
+2. Set up commit signing: [GitHub Docs](https://docs.github.com/en/authentication/managing-commit-signature-verification)
+3. Configure auto-signing:
+   ```bash
+   git config commit.gpgsign true   # For GPG
+   # or
+   git config gpg.format ssh        # For SSH keys
+   git config user.signingkey ~/.ssh/id_ed25519.pub
+   ```
+4. If commits are already pushed, you'll need to amend and force-push (or create a new PR with signed commits)
 
 ## Next Steps
 

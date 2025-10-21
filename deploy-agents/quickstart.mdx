@@ -26,22 +26,17 @@ cd demo-agent
 
 ## Step 2: Customize Agent Metadata
 
-Edit `agent.yaml` (agent identity):
+Edit `agent.yaml` and set:
+- `developer` - Your GitHub username or organization
+- `name` - Your agent name (e.g., demo-agent)
+- `description` - What your agent does
+- `container_image` - Full registry path (e.g., docker.io/your-org/demo-agent)
 
-```yaml
-developer: your-org              # Your AgentSystems developer identity
-name: demo-agent                 # Your agent name
-description: "Demo agent that returns historical events for a date and creates a story"
-container_image: your-org/demo-agent  # Your Docker Hub repository
-```
+Edit `metadata.yaml` and set:
+- `version` - Your version number (e.g., "0.1.0")
+- `model_dependencies` - Keep `gemma3:1b` (works locally without API keys)
 
-Edit `metadata.yaml` (version-specific attributes):
-
-```yaml
-version: "0.1.0"                 # Your version number
-model_dependencies:
-  - gemma3:1b                    # Keep this - works locally
-```
+See the template files for all available fields and examples.
 
 ## Step 3: Build and Push
 
