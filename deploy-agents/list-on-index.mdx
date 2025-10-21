@@ -118,24 +118,19 @@ Edit `developers/your-username/agents/your-agent.yaml`:
 ```yaml
 name: your-agent                # Lowercase, alphanumeric, hyphens only
 developer: your-username        # Must match folder name
-version: 0.1.0                  # Semantic version
 description: "Brief description of what your agent does"
 
-model_dependencies:
-  - gemma3:1b                   # Required AI models
-
-# Container image (if public)
-container_image: docker.io/your-username/your-agent:0.1.0
+# Container image (without tag)
+container_image: docker.io/your-username/your-agent
 container_image_access: public  # public or private
 
 # Source repository (if public)
 source_repository_url: https://github.com/your-username/your-agent
 source_repository_access: public
 
-# Agent metadata
+# Default metadata (can be overridden per version)
 context: general                # Context: code, data, general, etc.
 primary_function: research      # Primary function category
-readiness_level: beta           # experimental, beta, production, deprecated
 listing_status: listed          # listed or unlisted
 
 # Capabilities
@@ -148,30 +143,52 @@ tags:
   - history
   - storytelling
   - research
+
+# Versions (required - at least one version)
+versions:
+  - version: "0.1.0"            # Semantic version (x.y.z or x.y.z-beta.1), used as container tag
+    is_latest: true             # Exactly one version must be true
+    listing_status: listed      # Override default if needed
+    readiness_level: beta       # experimental, beta, production, deprecated
+
+    model_dependencies:         # Required for each version
+      - gemma3:1b
+
+    input_schema:               # Optional: version-specific parameters
+      query:
+        type: string
+        required: true
+        description: Your input parameter
+
+    release_notes: |            # Optional: markdown release notes
+      ## Initial Release
+
+      First public release with basic features.
 ```
 
 <Accordion title="Complete Agent Metadata Schema">
 
-**Required**:
+**Required (root level)**:
 - `name` (string): Agent name (lowercase, alphanumeric, hyphens)
 - `developer` (string): Your GitHub username
-- `version` (string): Semantic version (e.g., "1.0.0")
 - `description` (string): Short description
+- `container_image` (string): Container image reference without tag (e.g., docker.io/user/agent)
+- `versions` (array): Array of version objects (at least one required)
+
+**Required (in each version object)**:
+- `version` (string): Semantic version (e.g., "0.1.0" or "1.0.0-beta.1"), used as container image tag
+- `is_latest` (boolean): Exactly one version must be true
 - `model_dependencies` (array): Required AI models (at least one)
 
-**Optional**:
+**Optional (root level - defaults for all versions)**:
 - `context` (string): Operating context
 - `primary_function` (string): Primary function category
-- `readiness_level` (string): "experimental", "beta", "production", or "deprecated"
 - `listing_status` (string): "listed" or "unlisted"
-- `container_image` (string): Container image reference (e.g., docker.io/user/agent)
 - `container_image_access` (string): "public" or "private"
 - `source_repository_url` (string): Source code URL
 - `source_repository_access` (string): "public" or "private"
-- `required_egress` (array): Required network egress URLs
-- `input_types` (array): Supported input data types
-- `output_types` (array): Supported output data types
-- `input_schema` (object): Input parameter schema
+- `tags` (array): Searchable tags
+- `capabilities` (array): Agent capabilities
 - `facets` (object): Flexible categorization metadata
   - `latency` (string): Latency profile
   - `cost_profile` (string): Cost profile
@@ -180,11 +197,16 @@ tags:
   - `model_tooling` (array): Model frameworks used
   - `industries` (array): Target industries
   - `integrations` (array): Supported integrations
-- `tags` (array): Searchable tags
-- `capabilities` (array): Agent capabilities
-- `author` (string): Original author name
-- `created_at` (string): ISO 8601 creation timestamp
-- `last_updated` (string): ISO 8601 last update timestamp
+
+**Optional (version level - can override defaults)**:
+- `listing_status` (string): Override default listing for this version
+- `readiness_level` (string): "experimental", "beta", "production", or "deprecated"
+- `container_image_access` (string): Override default access
+- `required_egress` (array): Required network egress URLs
+- `input_schema` (object): Input parameter schema for this version
+- `description` (string): Version-specific description override
+- `capabilities` (array): Version-specific capabilities override
+- `release_notes` (string): Markdown-formatted release notes
 
 See the [agent schema](https://github.com/agentsystems/agent-index/blob/main/schema/agent.schema.json) for complete details.
 
