@@ -1,23 +1,29 @@
 ---
 title: Introduction
-description: The open platform for AI agents
+description: Self-hosted platform for discovering and running AI agents
 ---
 
-## The Open Platform for AI Agents
+## Self-hosted platform for discovering and running AI agents
 
-AgentSystems lets you run community and commercial AI agents in any cloud or on your own hardware. Browse agents from community indexes or configure agents directly.
+Deploy specialized agents on your infrastructure—without building from scratch or using SaaS.
 
 <Info>
-**What is AgentSystems?** An open platform that runs AI agents in Docker containers, supports multiple AI providers, and provides audit logging. Deploy on your infrastructure or in your cloud.
+**What is AgentSystems?** A self-hosted platform that combines a federated agent ecosystem, provider portability, and container isolation. Browse community agents, deploy on your infrastructure, and switch between AI providers through configuration.
 </Info>
 
-## Why Use an Open Platform for AI Agents?
+## Why AgentSystems?
 
-Run agents on your own machines or in your own cloud:
-- **Data Sovereignty**: Process data on your infrastructure
-- **Provider Flexibility**: OpenAI, Anthropic, AWS Bedrock, or local models via Ollama
-- **Cost Control**: Use your hardware and API keys directly
-- **Audit Logging**: Operation logging to PostgreSQL
+Teams want to use specialized AI agents but face a dilemma:
+
+- 🔒 **SaaS agents** require sending data to third parties
+- 🛠️ **Building from scratch** takes weeks of development per agent (most teams lack ML expertise)
+- 🐳 **Manual Docker orchestration** means configuring networks, volumes, proxies, and API keys for each agent
+
+**AgentSystems provides** a standardized runtime and ecosystem:
+- **Federated Agent Ecosystem**: Git-based agent index where developers publish via GitHub forks
+- **Provider Portability**: Switch from OpenAI to Anthropic to Ollama through configuration
+- **Container Isolation**: Each agent runs in its own Docker container with configurable egress filtering
+- **Audit Trail**: Hash-chained logs for operation tracking
 
 ## Key Capabilities
 
@@ -43,9 +49,9 @@ Run agents on your own machines or in your own cloud:
 
 The platform targets scenarios requiring local AI execution:
 
-- Processing sensitive documents
+- Processing documents on your infrastructure
 - Running AI workloads on-premise
-- Keeping data within specific infrastructure
+- Keeping data within your own environment
 - Testing multiple AI providers
 - Building containerized AI agents
 
