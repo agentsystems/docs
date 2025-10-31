@@ -1,0 +1,65 @@
+---
+title: Manual Installation
+description: Step-by-step guide to manually install AgentSystems
+---
+
+# Manual Installation
+
+Install AgentSystems manually by following these steps.
+
+## Prerequisites
+
+### 1. Python 3.11 or Higher
+
+AgentSystems requires Python 3.11+. Check your version:
+
+```bash
+python3 --version
+```
+
+If you need to upgrade, see the [Python downloads page](https://www.python.org/downloads/).
+
+### 2. Docker
+
+Docker is required to run AgentSystems containers.
+
+- **macOS**: Install [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+- **Linux**: Follow the [official Docker Engine installation guide](https://docs.docker.com/engine/install/)
+
+Verify Docker is running:
+```bash
+docker ps
+```
+
+## Installation Steps
+
+### 1. Install pipx
+
+Install [pipx](https://pipx.pypa.io/stable/installation/) using your system's package manager or pip:
+
+```bash
+python3 -m pip install --user pipx
+python3 -m pipx ensurepath
+```
+
+Restart your terminal, then verify:
+```bash
+pipx --version
+```
+
+### 2. Install agentsystems-sdk
+
+```bash
+pipx install agentsystems-sdk
+agentsystems --version
+```
+
+## Initialize and Start
+
+```bash
+agentsystems init agent-platform
+cd agent-platform
+agentsystems up
+```
+
+Open your browser to `http://localhost:3001`
