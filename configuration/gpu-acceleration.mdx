@@ -1,0 +1,48 @@
+---
+title: GPU Acceleration
+description: Enable NVIDIA GPU acceleration for Ollama
+---
+
+# GPU Acceleration
+
+AgentSystems includes Ollama for local model inference. By default, Ollama runs on CPU. If you have an NVIDIA GPU on Linux, you can enable GPU acceleration for faster inference.
+
+## Prerequisites
+
+- Linux with NVIDIA GPU
+- [NVIDIA drivers and nvidia-container-toolkit](https://hub.docker.com/r/ollama/ollama) installed
+
+## Configuration
+
+After running `agentsystems init`, edit `compose/local/docker-compose.yml` and add this to the `ollama` service:
+
+```yaml
+ollama:
+  image: ollama/ollama:latest
+  # ... existing configuration ...
+  deploy:
+    resources:
+      reservations:
+        devices:
+          - driver: nvidia
+            count: all
+            capabilities: [gpu]
+```
+
+Then run:
+
+```bash
+agentsystems up
+```
+
+## Verify
+
+Check GPU usage while running a model:
+
+```bash
+nvidia-smi
+```
+
+<Note>
+macOS does not support NVIDIA GPUs in Docker. AMD/Intel GPU support is not currently available.
+</Note>
