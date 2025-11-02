@@ -28,18 +28,11 @@ git clone https://github.com/your-org/demo-agent-private.git
 cd demo-agent-private
 ```
 
-### Step 2: Customize Agent Metadata
+### Step 2: Review the Template
 
-Edit `agent.yaml`:
+The template includes a demo agent. This guide deploys it as a private agent (not publicly discoverable).
 
-```yaml
-developer: your-org              # Your AgentSystems developer identity (lowercase, letters/numbers/hyphens/underscores)
-name: demo-agent-private         # Your agent name
-version: 0.1.0
-description: "Private demo agent for AgentSystems"
-model_dependencies:
-  - gemma3:1b                    # Keep this - works locally
-```
+To customize the agent logic, edit `main.py` and modify the agent's behavior. For this guide, we'll deploy the template as-is.
 
 ### Step 3: Build and Push to Private Repository
 
@@ -163,11 +156,11 @@ You should see historical events and a story!
 
 ### What You Built
 
-Your private agent is now deployed:
+Your private agent is deployed:
 - Uses a **private Docker Hub repository**
 - Requires credentials to pull and deploy
 - Runs in a Docker container
-- Is accessible at `http://localhost:18080/invoke/demo-agent-private`
+- Accessible at `http://localhost:18080/invoke/demo-agent-private`
 
 ## GitHub Container Registry (GHCR)
 

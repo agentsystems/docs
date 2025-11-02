@@ -24,19 +24,15 @@ git clone https://github.com/your-org/demo-agent.git
 cd demo-agent
 ```
 
-## Step 2: Customize Agent Metadata
+## Step 2: Review the Template
 
-Edit `agent.yaml` and set:
-- `developer` - Your GitHub username or organization
-- `name` - Your agent name (e.g., demo-agent)
-- `description` - What your agent does
-- `container_image` - Full registry path (e.g., docker.io/your-org/demo-agent)
+The template includes a demo agent that:
+- Accepts a date (e.g., "April 1")
+- Returns historical events for that date
+- Creates a story from those events
+- Uses `gemma3:1b` model
 
-Edit `metadata.yaml` and set:
-- `version` - Your version number (e.g., "0.1.0")
-- `model_dependencies` - Keep `gemma3:1b` (works locally without API keys)
-
-See the template files for all available fields and examples.
+This quickstart deploys the template as-is without modification.
 
 ## Step 3: Build and Push
 

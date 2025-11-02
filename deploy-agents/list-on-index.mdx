@@ -123,19 +123,6 @@ cp examples/agents/demo-agent/versions.yaml developers/your-github-username/agen
 cp examples/agents/demo-agent/0.1.0.yaml developers/your-github-username/agents/your-agent/
 ```
 
-<Note>
-**Publishing from agent-template**: If you built an agent using [agent-template](https://github.com/agentsystems/agent-template), copy your files to create the index structure:
-
-- Copy `agent.yaml` from your agent → `developers/your-github-username/agents/your-agent/agent.yaml`
-- Copy `metadata.yaml` from your agent → `developers/your-github-username/agents/your-agent/0.1.0.yaml` (rename to match version)
-- Create `versions.yaml` with:
-
-  ```yaml
-  latest_version: "0.1.0"
-  listed_versions:
-    - "0.1.0"
-  ```
-</Note>
 
 The directory structure will be:
 ```
