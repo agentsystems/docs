@@ -17,93 +17,48 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Getting Started",
+        "tab": "Fortress",
         "groups": [
           {
-            "group": "Welcome to AgentSystems",
+            "group": "Getting Started",
             "pages": [
-              "getting-started/index",
-              "getting-started/quickstart",
-              "getting-started/manual-installation",
-              "getting-started/key-concepts"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Configuration",
-        "groups": [
-          {
-            "group": "Overview",
-            "pages": [
-              "configuration/index"
+              "fortress/getting-started/index",
+              "fortress/getting-started/quickstart",
+              "fortress/getting-started/manual-installation",
+              "fortress/getting-started/key-concepts"
             ]
           },
           {
-            "group": "Connections",
+            "group": "Configuration",
             "pages": [
-              "configuration/model-connections",
-              "configuration/index-connections",
-              "configuration/registry-connections",
-              "configuration/agent-connections"
+              "fortress/configuration/index",
+              "fortress/configuration/model-connections",
+              "fortress/configuration/index-connections",
+              "fortress/configuration/registry-connections",
+              "fortress/configuration/agent-connections",
+              "fortress/configuration/credentials",
+              "fortress/configuration/gpu-acceleration"
             ]
           },
           {
-            "group": "System",
+            "group": "User Guide",
             "pages": [
-              "configuration/credentials",
-              "configuration/gpu-acceleration"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "User Guide",
-        "groups": [
-          {
-            "group": "Basics",
-            "pages": [
-              "user-guide/cli-commands",
-              "user-guide/running-agents",
-              "user-guide/agent-index"
+              "fortress/user-guide/cli-commands",
+              "fortress/user-guide/running-agents",
+              "fortress/user-guide/agent-index",
+              "fortress/user-guide/artifacts",
+              "fortress/user-guide/audit-logs",
+              "fortress/user-guide/troubleshooting"
             ]
           },
           {
-            "group": "Features",
+            "group": "Deploy Agents",
             "pages": [
-              "user-guide/artifacts",
-              "user-guide/audit-logs"
-            ]
-          },
-          {
-            "group": "Troubleshooting",
-            "pages": [
-              "user-guide/troubleshooting"
-            ]
-          }
-        ]
-      },
-      {
-        "tab": "Deploy Agents",
-        "groups": [
-          {
-            "group": "Deployment",
-            "pages": [
-              "deploy-agents/quickstart",
-              "deploy-agents/private-agents"
-            ]
-          },
-          {
-            "group": "Distribution",
-            "pages": [
-              "deploy-agents/list-on-index"
-            ]
-          },
-          {
-            "group": "Reference",
-            "pages": [
-              "deploy-agents/supported-models",
-              "deploy-agents/supported-frameworks"
+              "fortress/deploy-agents/quickstart",
+              "fortress/deploy-agents/private-agents",
+              "fortress/deploy-agents/list-on-index",
+              "fortress/deploy-agents/supported-models",
+              "fortress/deploy-agents/supported-frameworks"
             ]
           }
         ]
