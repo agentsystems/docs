@@ -15,12 +15,27 @@
     }
   },
   "navigation": {
-    "tabs": [
+    "dropdowns": [
       {
-        "tab": "Fortress",
-        "groups": [
+        "dropdown": "Home",
+        "pages": ["index"]
+      },
+      {
+        "dropdown": "Notary",
+        "tabs": [
           {
-            "group": "Getting Started",
+            "tab": "Getting Started",
+            "pages": [
+              "notary/getting-started/index"
+            ]
+          }
+        ]
+      },
+      {
+        "dropdown": "Fortress",
+        "tabs": [
+          {
+            "tab": "Getting Started",
             "pages": [
               "fortress/getting-started/index",
               "fortress/getting-started/quickstart",
@@ -29,7 +44,7 @@
             ]
           },
           {
-            "group": "Configuration",
+            "tab": "Configuration",
             "pages": [
               "fortress/configuration/index",
               "fortress/configuration/model-connections",
@@ -41,7 +56,7 @@
             ]
           },
           {
-            "group": "User Guide",
+            "tab": "User Guide",
             "pages": [
               "fortress/user-guide/cli-commands",
               "fortress/user-guide/running-agents",
@@ -52,7 +67,7 @@
             ]
           },
           {
-            "group": "Deploy Agents",
+            "tab": "Deploy Agents",
             "pages": [
               "fortress/deploy-agents/quickstart",
               "fortress/deploy-agents/private-agents",
