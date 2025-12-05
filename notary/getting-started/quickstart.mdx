@@ -1,0 +1,155 @@
+---
+title: Quickstart
+description: Signup, integrate, and verify in 15 minutes
+---
+
+## 1. Create Account
+
+Go to [notary.agentsystems.ai](https://notary.agentsystems.ai) and sign up. You'll be prompted to name your organization.
+
+## 2. Generate an API Key
+
+1. Go to **API Keys** in the sidebar (or from the Dashboard)
+2. Click **Generate Key**
+3. Select **Test** environment (production requires a paid plan)
+4. Name your key and click **Generate**
+5. Copy and save the key — it's only shown once
+
+Test keys start with `sk_asn_test_`. Hashes from test keys are retained for 7 days.
+
+## 3. Set Up Your S3 Bucket
+
+The SDK writes raw logs directly to your S3 bucket.
+
+1. Create an S3 bucket (names are globally unique, so include your company name — e.g., `acme-corp-raw-ai-logs`)
+2. Create the following IAM policy:
+   ```json
+   {
+     "Version": "2012-10-17",
+     "Statement": [{
+       "Effect": "Allow",
+       "Action": ["s3:PutObject", "s3:GetObject", "s3:ListBucket"],
+       "Resource": [
+         "arn:aws:s3:::acme-corp-raw-ai-logs",
+         "arn:aws:s3:::acme-corp-raw-ai-logs/*"
+       ]
+     }]
+   }
+   ```
+3. Create an IAM user and attach the policy
+4. Generate access keys for the user
+
+**Bucket structure:** The SDK writes logs to `test/{tenant_id}/` or `prod/{tenant_id}/` depending on your API key type.
+
+## 4. Install the SDK
+
+```bash
+mkdir notary-demo && cd notary-demo
+python3 -m venv .venv
+source .venv/bin/activate
+pip install "agentsystems-notary[langchain]" langchain-anthropic python-dotenv
+```
+
+## 5. Configure Environment
+
+Create a `.env` file:
+
+```bash
+# AgentSystems Notary
+AGENTSYSTEMS_NOTARY_API_KEY=sk_asn_test_...
+
+# AWS credentials for your S3 bucket
+AWS_ACCESS_KEY_ID=...
+AWS_SECRET_ACCESS_KEY=...
+AWS_DEFAULT_REGION=us-east-1
+
+# Your LLM provider
+ANTHROPIC_API_KEY=...
+```
+
+## 6. Integrate the SDK
+
+Create `main.py`:
+
+```python
+import os
+from dotenv import load_dotenv
+from agentsystems_notary import LangChainNotary
+from langchain_anthropic import ChatAnthropic
+
+load_dotenv()
+
+# Initialize Notary callback
+notary = LangChainNotary(
+    api_key=os.getenv("AGENTSYSTEMS_NOTARY_API_KEY"),
+    slug="customer-123",  # Your customer's identifier
+    org_bucket_name="acme-corp-raw-ai-logs",
+    debug=True
+)
+
+# Add to any LangChain model
+model = ChatAnthropic(
+    model="claude-sonnet-4-5-20250929",
+    api_key=os.getenv("ANTHROPIC_API_KEY"),
+    callbacks=[notary]
+)
+
+# All LLM calls are now logged
+response = model.invoke("What is 2 + 2?")
+print(response.content)
+```
+
+Run it:
+
+```bash
+python main.py
+```
+
+With `debug=True`, you'll see confirmation that the log was written. Check your S3 bucket — there should be a new file under `test/{tenant_id}/`.
+
+Back in the dashboard, you'll see "customer-123" appear in your **Tenants** list (auto-discovered from the slug).
+
+## 7. Generate an Audit Ticket
+
+1. Go to [notary.agentsystems.ai](https://notary.agentsystems.ai)
+2. Click **Tenants** in the sidebar
+3. Find your tenant and click **Audit**
+4. Select **Test** data type (production requires a paid plan)
+5. Set the date range
+6. Click **Download Ticket**
+
+This downloads a signed token that grants access to verify logs for this tenant and date range.
+
+## 8. Export Your Logs
+
+The audit modal shows commands to export logs from your S3 bucket:
+
+```bash
+# Create a folder
+mkdir customer-123-logs
+
+# Download logs from S3
+aws s3 sync s3://acme-corp-raw-ai-logs/test/TENANT_ID/ ./customer-123-logs/
+
+# Create ZIP for verification
+zip -r customer-123-logs.zip customer-123-logs
+```
+
+Replace `TENANT_ID` with your tenant's ID (shown in the dashboard when you hover over the tenant name).
+
+## 9. Verify
+
+1. Go to [verify.agentsystems.ai](https://verify.agentsystems.ai)
+2. Upload the audit ticket (`.json` file)
+3. Upload the logs ZIP
+4. Click **Start Verification**
+
+**Results:**
+
+| Result | Meaning |
+|--------|---------|
+| **Verified Records** | Records in the ZIP that match AgentSystems records |
+| **Unrecognized Records** | Records in the ZIP that weren't recorded by AgentSystems |
+| **Missing Records** | Records that AgentSystems recorded but aren't in the ZIP |
+
+After verification, you can download an **attestation packet** — a ZIP containing your logs, the audit ticket, a signed attestation certificate (PDF), and verification instructions. Attestation packets can be generated regardless of the verification outcome.
