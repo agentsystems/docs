@@ -1,0 +1,50 @@
+---
+title: Verification
+description: How to verify log integrity
+---
+
+Verification compares logs against AgentSystems records to identify any discrepancies. Anyone with an audit ticket can verify — your customers, their compliance teams, or third-party reviewers.
+
+## What You Need
+
+| Item | How to Get It |
+|------|---------------|
+| **Audit Ticket** | Generate from [notary.agentsystems.ai](https://notary.agentsystems.ai) → Tenants → Audit |
+| **Logs ZIP** | Export from your S3 bucket (commands shown in the Audit modal) |
+
+The audit ticket is a signed token that grants access to check logs against AgentSystems records for a specific tenant and date range.
+
+## Running Verification
+
+1. Go to [verify.agentsystems.ai](https://verify.agentsystems.ai)
+2. Upload the audit ticket (`.json`)
+3. Upload the logs (`.zip`)
+4. Click **Start Verification**
+
+No account is required to run verification.
+
+## Understanding Results
+
+| Result | Meaning |
+|--------|---------|
+| **Verified Records** | Records in the ZIP that match AgentSystems records |
+| **Unrecognized Records** | Records in the ZIP that weren't recorded by AgentSystems |
+| **Missing Records** | Records that AgentSystems recorded but aren't in the ZIP |
+
+## Attestation Packets
+
+After verification, download an attestation packet — a self-contained proof bundle you can share with customers, compliance teams, or regulators. Recipients can verify the cryptographic signature themselves without needing to re-run verification or trust your word.
+
+## Verifying the Signature
+
+The attestation certificate is signed with AgentSystems' notary key. To verify independently:
+
+```bash
+# Download the public key
+curl -o notary.pem https://verify-api.agentsystems.ai/.well-known/notary.pem
+
+# Verify the signature
+openssl dgst -sha256 -verify notary.pem -signature attestation.pdf.sig attestation.pdf
+```
+
+Expected output: `Verified OK`

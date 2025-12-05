@@ -1,6 +1,32 @@
 ---
 title: Introduction
-description: Audit trail infrastructure for AI agent operations
+description: Third-party attestation for AI agent operations
 ---
 
-Documentation coming soon.
+AgentSystems Notary provides independent verification of your AI system's behavior. When buyers ask "how do we trust your AI logs?", you have an answer.
+
+## How It Works
+
+1. **Record** - The SDK captures LLM interactions as they happen
+2. **Dual-Write** - Raw logs go to your S3 bucket. SHA-256 hashes go to AgentSystems.
+3. **Verify** - Anyone with an audit ticket can verify logs at [verify.agentsystems.ai](https://verify.agentsystems.ai)
+
+## Components
+
+| Component | URL | Purpose |
+|-----------|-----|---------|
+| Dashboard | [notary.agentsystems.ai](https://notary.agentsystems.ai) | View tenants, manage API keys, generate audit tickets |
+| Verification Portal | [verify.agentsystems.ai](https://verify.agentsystems.ai) | Verify logs and download attestation packets |
+| SDK | [PyPI](https://pypi.org/project/agentsystems-notary/) | Python SDK for LangChain and CrewAI |
+
+## Key Concepts
+
+**Tenants** represent your customers. They're auto-discovered when the SDK logs its first interaction with a given slug. You don't need to create them in advance.
+
+**Audit Tickets** are signed tokens that grant access to verify logs for a specific tenant and date range. They don't contain the hashes themselves — they authorize the verification portal to check logs against AgentSystems records.
+
+**Attestation Packets** are self-contained proof bundles you can share with customers, compliance teams, or regulators. They contain the logs, audit ticket, a signed attestation certificate, and instructions for independent signature verification — everything needed to confirm the logs were checked against AgentSystems records.
+
+<Card title="Quickstart" icon="rocket" href="/notary/getting-started/quickstart">
+  End-to-end tutorial: signup → integration → verification
+</Card>
