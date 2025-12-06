@@ -18,10 +18,12 @@
     "dropdowns": [
       {
         "dropdown": "Home",
+        "icon": "house",
         "pages": ["index"]
       },
       {
         "dropdown": "Notary",
+        "icon": "stamp",
         "tabs": [
           {
             "tab": "Getting Started",
@@ -40,6 +42,7 @@
       },
       {
         "dropdown": "Fortress",
+        "icon": "fort",
         "tabs": [
           {
             "tab": "Getting Started",
