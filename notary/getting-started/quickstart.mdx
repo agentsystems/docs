@@ -9,10 +9,10 @@ Go to [notary.agentsystems.ai](https://notary.agentsystems.ai) and sign up. You'
 
 ## 2. Generate an API Key
 
-1. Go to **API Keys** in the sidebar (or from the Dashboard)
-2. Click **Generate Key**
+1. From the Dashboard, click **Add** under API Keys
+2. Name your key
 3. Select **Test** environment (production requires a paid plan)
-4. Name your key and click **Generate**
+4. Click **Generate Key**
 5. Copy and save the key — it's only shown once
 
 Test keys start with `sk_asn_test_`. Hashes from test keys are retained for 7 days.
@@ -37,7 +37,7 @@ The SDK writes raw logs directly to your S3 bucket.
    }
    ```
 3. Create an IAM user and attach the policy
-4. Generate access keys for the user
+4. Generate access keys for the user (select "Application running outside AWS") and save them — the secret is only shown once
 
 **Bucket structure:** The SDK writes logs to `test/{tenant_id}/` or `prod/{tenant_id}/` depending on your API key type.
 
@@ -105,37 +105,27 @@ Run it:
 python main.py
 ```
 
-With `debug=True`, you'll see confirmation that the log was written. Check your S3 bucket — there should be a new file under `test/{tenant_id}/`.
+With `debug=True`, you'll see confirmation that the log was written. Check your S3 bucket — there should be a new file under `test/{tenant_id}/{year}/{month}/{day}/`.
 
 Back in the dashboard, you'll see "customer-123" appear in your **Tenants** list (auto-discovered from the slug).
 
 ## 7. Generate an Audit Ticket
 
 1. Go to [notary.agentsystems.ai](https://notary.agentsystems.ai)
-2. Click **Tenants** in the sidebar
-3. Find your tenant and click **Audit**
-4. Select **Test** data type (production requires a paid plan)
-5. Set the date range
-6. Click **Download Ticket**
+2. Click **Tenants** in the navbar (or **View All** from the Tenants card on the Dashboard)
+3. Click **Generate Verification Ticket**
+4. Select your tenant from the dropdown
+5. Select **Test** data type (production requires a paid plan)
+6. Leave the default date range or adjust if needed
+7. Check the confirmation box and click **Download Ticket**
 
 This downloads a signed token that grants access to verify logs for this tenant and date range.
 
 ## 8. Export Your Logs
 
-The audit modal shows commands to export logs from your S3 bucket:
+After downloading the ticket, a second modal will show commands to export logs from your S3 bucket. Copy and run the commands from the modal — they'll have your tenant ID pre-filled. Replace `YOUR_BUCKET` with your S3 bucket name.
 
-```bash
-# Create a folder
-mkdir customer-123-logs
-
-# Download logs from S3
-aws s3 sync s3://acme-corp-raw-ai-logs/test/TENANT_ID/ ./customer-123-logs/
-
-# Create ZIP for verification
-zip -r customer-123-logs.zip customer-123-logs
-```
-
-Replace `TENANT_ID` with your tenant's ID (shown in the dashboard when you hover over the tenant name).
+Requires [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) configured with credentials for your bucket.
 
 ## 9. Verify
 
