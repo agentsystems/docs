@@ -43,12 +43,24 @@ The SDK writes raw logs directly to your S3 bucket.
 
 ## 4. Install the SDK
 
-```bash
-mkdir notary-demo && cd notary-demo
-python3 -m venv .venv
-source .venv/bin/activate
-pip install "agentsystems-notary[langchain]" langchain-anthropic python-dotenv
-```
+<Tabs>
+  <Tab title="LangChain">
+    ```bash
+    mkdir notary-demo && cd notary-demo
+    python3 -m venv .venv
+    source .venv/bin/activate
+    pip install "agentsystems-notary[langchain]" langchain-anthropic python-dotenv
+    ```
+  </Tab>
+  <Tab title="CrewAI">
+    ```bash
+    mkdir notary-demo && cd notary-demo
+    python3 -m venv .venv
+    source .venv/bin/activate
+    pip install "agentsystems-notary[crewai]" crewai python-dotenv
+    ```
+  </Tab>
+</Tabs>
 
 ## 5. Configure Environment
 
@@ -69,41 +81,95 @@ ANTHROPIC_API_KEY=...
 
 ## 6. Integrate the SDK
 
-Create `main.py`:
+<Tabs>
+  <Tab title="LangChain">
+    Create `test_langchain.py`:
 
-```python
-import os
-from dotenv import load_dotenv
-from agentsystems_notary import LangChainNotary
-from langchain_anthropic import ChatAnthropic
+    ```python
+    import os
+    from dotenv import load_dotenv
+    from agentsystems_notary import LangChainNotary
+    from langchain_anthropic import ChatAnthropic
 
-load_dotenv()
+    load_dotenv()
 
-# Initialize Notary callback
-notary = LangChainNotary(
-    api_key=os.getenv("AGENTSYSTEMS_NOTARY_API_KEY"),
-    slug="customer-123",  # Your customer's identifier
-    org_bucket_name="acme-corp-raw-ai-logs",
-    debug=True
-)
+    # Initialize Notary callback
+    notary = LangChainNotary(
+        api_key=os.getenv("AGENTSYSTEMS_NOTARY_API_KEY"),
+        slug="customer-123",  # Your customer's identifier
+        org_bucket_name="acme-corp-raw-ai-logs",
+        debug=True
+    )
 
-# Add to any LangChain model
-model = ChatAnthropic(
-    model="claude-sonnet-4-5-20250929",
-    api_key=os.getenv("ANTHROPIC_API_KEY"),
-    callbacks=[notary]
-)
+    # Add to any LangChain model
+    model = ChatAnthropic(
+        model="claude-sonnet-4-5-20250929",
+        api_key=os.getenv("ANTHROPIC_API_KEY"),
+        callbacks=[notary]
+    )
 
-# All LLM calls are now logged
-response = model.invoke("What is 2 + 2?")
-print(response.content)
-```
+    # All LLM calls are now logged
+    response = model.invoke("What is 2 + 2?")
+    print(response.content)
+    ```
 
-Run it:
+    Run it:
 
-```bash
-python main.py
-```
+    ```bash
+    python test_langchain.py
+    ```
+  </Tab>
+  <Tab title="CrewAI">
+    Create `test_crewai.py`:
+
+    ```python
+    import os
+    from dotenv import load_dotenv
+    from agentsystems_notary import CrewAINotary
+    from crewai import Agent, Task, Crew, LLM
+
+    load_dotenv()
+
+    # Initialize Notary (hooks register automatically)
+    notary = CrewAINotary(
+        api_key=os.getenv("AGENTSYSTEMS_NOTARY_API_KEY"),
+        slug="customer-123",  # Your customer's identifier
+        org_bucket_name="acme-corp-raw-ai-logs",
+        debug=True
+    )
+
+    # Create LLM
+    llm = LLM(
+        model="anthropic/claude-sonnet-4-5-20250929",
+        api_key=os.getenv("ANTHROPIC_API_KEY")
+    )
+
+    # Create agent and task
+    agent = Agent(
+        role="Research Analyst",
+        goal="Answer questions accurately",
+        backstory="You are an expert analyst.",
+        llm=llm
+    )
+    task = Task(
+        description="What is 2 + 2?",
+        expected_output="The answer to the math question",
+        agent=agent
+    )
+    crew = Crew(agents=[agent], tasks=[task])
+
+    # All LLM calls are now logged
+    result = crew.kickoff()
+    print(result)
+    ```
+
+    Run it:
+
+    ```bash
+    python test_crewai.py
+    ```
+  </Tab>
+</Tabs>
 
 With `debug=True`, you'll see confirmation that the log was written. Check your S3 bucket — there should be a new file under `test/{tenant_id}/{year}/{month}/{day}/`.
 
