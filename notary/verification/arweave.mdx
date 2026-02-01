@@ -1,0 +1,86 @@
+---
+title: Independent Verification
+description: Verify Arweave-notarized logs with open-source tooling
+---
+
+## Overview
+
+For logs notarized to the Arweave blockchain, you can verify them independently using our open-source verification tool. This approach:
+
+- Requires no API keys or AgentSystems infrastructure
+- Is fully open-source and auditable
+- Queries the public Arweave network directly
+
+## Prerequisites
+
+- Logs exported from your S3 bucket (ZIP file)
+- Verification ticket (generated from notary dashboard or your records)
+
+## Installation
+
+```bash
+npm install -g agentsystems-verify
+```
+
+## CLI Usage
+
+### With a ticket file
+
+```bash
+agentsystems-verify --ticket ticket.json --logs logs.zip
+```
+
+### With CLI flags
+
+```bash
+agentsystems-verify \
+  --owner <arweave-wallet-address> \
+  --namespace my_namespace \
+  --start 2026-01-01 \
+  --end 2026-01-31 \
+  --logs logs.zip
+```
+
+### Interactive mode
+
+```bash
+agentsystems-verify --logs logs.zip
+# Prompts for missing values
+```
+
+## Understanding Results
+
+| Result | Meaning |
+|--------|---------|
+| Verified | Found in ZIP and on Arweave blockchain |
+| Unnotarized | In ZIP but not on Arweave |
+| Missing | On Arweave but not in ZIP |
+
+## Library Usage (JavaScript/TypeScript)
+
+```typescript
+import { verify, validateTicket } from "agentsystems-verify";
+import { readFileSync } from "fs";
+
+const ticket = validateTicket(JSON.parse(readFileSync("ticket.json", "utf-8")));
+const zipBuffer = readFileSync("logs.zip");
+
+const results = await verify(ticket, zipBuffer, {
+  onProgress: (msg) => console.log(msg),
+});
+
+console.log(`Verified: ${results.verified.length}`);
+console.log(`Unnotarized: ${results.unnotarized.length}`);
+console.log(`Missing: ${results.missing.length}`);
+```
+
+## How It Works
+
+1. Extracts JSON files from the ZIP archive
+2. Canonicalizes and hashes each file (SHA-256)
+3. Queries Arweave blockchain for matching transactions
+4. Compares local hashes against blockchain records
+
+## Source Code
+
+[github.com/agentsystems/agentsystems-verify](https://github.com/agentsystems/agentsystems-verify)

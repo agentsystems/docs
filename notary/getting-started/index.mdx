@@ -8,8 +8,21 @@ AgentSystems Notary provides independent verification of your AI system's behavi
 ## How It Works
 
 1. **Record** - The SDK captures LLM interactions as they happen
-2. **Dual-Write** - Raw logs go to your S3 bucket. SHA-256 hashes go to AgentSystems.
-3. **Verify** - Anyone with an audit ticket can verify logs at [verify.agentsystems.ai](https://verify.agentsystems.ai)
+2. **Dual-Write** - Raw logs go to your S3 bucket. SHA-256 hashes go to your chosen storage.
+3. **Verify** - Anyone with an audit ticket can verify logs
+
+## Hash Storage Options
+
+Notary supports two hash storage methods. You can use one or both.
+
+| Option | Description | Verification |
+|--------|-------------|--------------|
+| Custodied | Hashes stored by AgentSystems API | Via [portal](https://verify.agentsystems.ai) |
+| Arweave | Hashes stored on public blockchain | [Independent verification](/notary/verification/arweave) with open-source CLI |
+
+**Custodied** is simpler to set up and provides a streamlined verification experience through the AgentSystems portal.
+
+**Arweave** provides decentralized, permanent storage on a public blockchain. Verification requires no AgentSystems infrastructure — anyone can verify using the open-source `agentsystems-verify` CLI.
 
 ## Components
 
@@ -18,6 +31,7 @@ AgentSystems Notary provides independent verification of your AI system's behavi
 | Dashboard | [notary.agentsystems.ai](https://notary.agentsystems.ai) | View tenants, manage API keys, generate audit tickets |
 | Verification Portal | [verify.agentsystems.ai](https://verify.agentsystems.ai) | Verify logs and download attestation packets |
 | SDK | [PyPI](https://pypi.org/project/agentsystems-notary/) | Python SDK for LangChain and CrewAI |
+| Verify CLI | [npm](https://www.npmjs.com/package/agentsystems-verify) | Open-source CLI for Arweave verification |
 
 ## Key Concepts
 
