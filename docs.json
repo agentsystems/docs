@@ -35,7 +35,8 @@
           {
             "tab": "Verification",
             "pages": [
-              "notary/verification/guide"
+              "notary/verification/guide",
+              "notary/verification/arweave"
             ]
           }
         ]

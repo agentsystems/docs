@@ -49,7 +49,7 @@ The SDK writes raw logs directly to your S3 bucket.
     mkdir notary-demo && cd notary-demo
     python3 -m venv .venv
     source .venv/bin/activate
-    pip install "agentsystems-notary[langchain]" langchain-anthropic python-dotenv
+    pip install agentsystems-notary langchain-anthropic python-dotenv
     ```
   </Tab>
   <Tab title="CrewAI">
@@ -57,7 +57,7 @@ The SDK writes raw logs directly to your S3 bucket.
     mkdir notary-demo && cd notary-demo
     python3 -m venv .venv
     source .venv/bin/activate
-    pip install "agentsystems-notary[crewai]" crewai python-dotenv
+    pip install agentsystems-notary crewai python-dotenv
     ```
   </Tab>
 </Tabs>
@@ -71,9 +71,10 @@ Create a `.env` file:
 AGENTSYSTEMS_NOTARY_API_KEY=sk_asn_test_...
 
 # AWS credentials for your S3 bucket
-AWS_ACCESS_KEY_ID=...
-AWS_SECRET_ACCESS_KEY=...
-AWS_DEFAULT_REGION=us-east-1
+ORG_AWS_S3_BUCKET_NAME=acme-corp-raw-ai-logs
+ORG_AWS_S3_ACCESS_KEY_ID=...
+ORG_AWS_S3_SECRET_ACCESS_KEY=...
+ORG_AWS_S3_REGION=us-east-1
 
 # Your LLM provider
 ANTHROPIC_API_KEY=...
@@ -88,24 +89,46 @@ ANTHROPIC_API_KEY=...
     ```python
     import os
     from dotenv import load_dotenv
-    from agentsystems_notary import LangChainNotary
+    from agentsystems_notary import (
+        LangChainNotary,
+        RawPayloadStorage,
+        CustodiedHashStorage,
+        AwsS3StorageConfig,
+    )
     from langchain_anthropic import ChatAnthropic
 
     load_dotenv()
 
-    # Initialize Notary callback
+    # Where full audit payloads are stored (your S3 bucket)
+    raw_payload_storage = RawPayloadStorage(
+        storage=AwsS3StorageConfig(
+            bucket_name=os.environ["ORG_AWS_S3_BUCKET_NAME"],
+            aws_access_key_id=os.environ["ORG_AWS_S3_ACCESS_KEY_ID"],
+            aws_secret_access_key=os.environ["ORG_AWS_S3_SECRET_ACCESS_KEY"],
+            aws_region=os.environ["ORG_AWS_S3_REGION"],
+        ),
+    )
+
+    # Where hashes are stored for verification
+    hash_storage = [
+        CustodiedHashStorage(
+            api_key=os.environ["AGENTSYSTEMS_NOTARY_API_KEY"],
+            slug="customer-123",
+        ),
+    ]
+
+    # Initialize notary
     notary = LangChainNotary(
-        api_key=os.getenv("AGENTSYSTEMS_NOTARY_API_KEY"),
-        slug="customer-123",  # Your customer's identifier
-        org_bucket_name="acme-corp-raw-ai-logs",
-        debug=True
+        raw_payload_storage=raw_payload_storage,
+        hash_storage=hash_storage,
+        debug=True,
     )
 
     # Add to any LangChain model
     model = ChatAnthropic(
         model="claude-sonnet-4-5-20250929",
-        api_key=os.getenv("ANTHROPIC_API_KEY"),
-        callbacks=[notary]
+        api_key=os.environ["ANTHROPIC_API_KEY"],
+        callbacks=[notary],
     )
 
     # All LLM calls are now logged
@@ -125,23 +148,45 @@ ANTHROPIC_API_KEY=...
     ```python
     import os
     from dotenv import load_dotenv
-    from agentsystems_notary import CrewAINotary
+    from agentsystems_notary import (
+        CrewAINotary,
+        RawPayloadStorage,
+        CustodiedHashStorage,
+        AwsS3StorageConfig,
+    )
     from crewai import Agent, Task, Crew, LLM
 
     load_dotenv()
 
-    # Initialize Notary (hooks register automatically)
+    # Where full audit payloads are stored (your S3 bucket)
+    raw_payload_storage = RawPayloadStorage(
+        storage=AwsS3StorageConfig(
+            bucket_name=os.environ["ORG_AWS_S3_BUCKET_NAME"],
+            aws_access_key_id=os.environ["ORG_AWS_S3_ACCESS_KEY_ID"],
+            aws_secret_access_key=os.environ["ORG_AWS_S3_SECRET_ACCESS_KEY"],
+            aws_region=os.environ["ORG_AWS_S3_REGION"],
+        ),
+    )
+
+    # Where hashes are stored for verification
+    hash_storage = [
+        CustodiedHashStorage(
+            api_key=os.environ["AGENTSYSTEMS_NOTARY_API_KEY"],
+            slug="customer-123",
+        ),
+    ]
+
+    # Initialize notary (hooks register automatically)
     notary = CrewAINotary(
-        api_key=os.getenv("AGENTSYSTEMS_NOTARY_API_KEY"),
-        slug="customer-123",  # Your customer's identifier
-        org_bucket_name="acme-corp-raw-ai-logs",
-        debug=True
+        raw_payload_storage=raw_payload_storage,
+        hash_storage=hash_storage,
+        debug=True,
     )
 
     # Create LLM
     llm = LLM(
         model="anthropic/claude-sonnet-4-5-20250929",
-        api_key=os.getenv("ANTHROPIC_API_KEY")
+        api_key=os.environ["ANTHROPIC_API_KEY"],
     )
 
     # Create agent and task
@@ -149,12 +194,12 @@ ANTHROPIC_API_KEY=...
         role="Research Analyst",
         goal="Answer questions accurately",
         backstory="You are an expert analyst.",
-        llm=llm
+        llm=llm,
     )
     task = Task(
         description="What is 2 + 2?",
         expected_output="The answer to the math question",
-        agent=agent
+        agent=agent,
     )
     crew = Crew(agents=[agent], tasks=[task])
 
@@ -209,3 +254,42 @@ Requires [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-star
 | **Missing Records** | Records that AgentSystems recorded but aren't in the ZIP |
 
 After verification, you can download an **attestation packet** — a ZIP containing your logs, the audit ticket, a signed attestation certificate (PDF), and verification instructions. Attestation packets can be generated regardless of the verification outcome.
+
+## Using Arweave (Optional)
+
+For decentralized hash storage on the Arweave blockchain, add `ArweaveHashStorage` to your hash storage list. Arweave requires a signer configuration for transaction signing.
+
+Add these environment variables:
+
+```bash
+ARWEAVE_BUNDLER_URL=https://node2.bundlr.network
+ARWEAVE_PRIVATE_KEY_PATH=path/to/rsa-4096-private.pem
+```
+
+Example using a local RSA-4096 private key:
+
+```python
+from agentsystems_notary import ArweaveHashStorage, LocalKeySignerConfig
+
+hash_storage = [
+    CustodiedHashStorage(
+        api_key=os.environ["AGENTSYSTEMS_NOTARY_API_KEY"],
+        slug="customer-123",
+    ),
+    ArweaveHashStorage(
+        namespace="my_namespace",
+        signer=LocalKeySignerConfig(
+            private_key_path=os.environ["ARWEAVE_PRIVATE_KEY_PATH"],
+        ),
+        bundler_url=os.environ["ARWEAVE_BUNDLER_URL"],
+    ),
+]
+```
+
+Supported signers:
+- `LocalKeySignerConfig` — Local RSA-4096 private key (PEM file or env var)
+- `AwsKmsSignerConfig` — AWS KMS managed key
+- `GcpKmsSignerConfig` — GCP Cloud KMS managed key
+- `AzureKeyVaultSignerConfig` — Azure Key Vault managed key
+
+See [Independent Verification](/notary/verification/arweave) for verifying Arweave-notarized logs.
