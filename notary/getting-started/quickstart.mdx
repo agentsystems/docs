@@ -1,25 +1,11 @@
 ---
 title: Quickstart
-description: Signup, integrate, and verify in 15 minutes
+description: Add independently verifiable audit logging to your AI agents
 ---
 
-## 1. Create Account
+## 1. Set Up Your S3 Bucket
 
-Go to [notary.agentsystems.ai](https://notary.agentsystems.ai) and sign up. You'll be prompted to name your organization.
-
-## 2. Generate an API Key
-
-1. From the Dashboard, click **Add** under API Keys
-2. Name your key
-3. Select **Test** environment (production requires a paid plan)
-4. Click **Generate Key**
-5. Copy and save the key — it's only shown once
-
-Test keys start with `sk_asn_test_`. Hashes from test keys are retained for 7 days.
-
-## 3. Set Up Your S3 Bucket
-
-The SDK writes raw logs directly to your S3 bucket.
+The SDK writes raw logs directly to your S3 bucket — you maintain full control.
 
 1. Create an S3 bucket (names are globally unique, so include your company name — e.g., `acme-corp-raw-ai-logs`)
 2. Create the following IAM policy:
@@ -37,11 +23,9 @@ The SDK writes raw logs directly to your S3 bucket.
    }
    ```
 3. Create an IAM user and attach the policy
-4. Generate access keys for the user (select "Application running outside AWS") and save them — the secret is only shown once
+4. Generate access keys for the user (select "Application running outside AWS") and save them
 
-**Bucket structure:** The SDK writes logs to `test/{tenant_id}/` or `prod/{tenant_id}/` depending on your API key type.
-
-## 4. Install the SDK
+## 2. Install the SDK
 
 <Tabs>
   <Tab title="LangChain">
@@ -62,25 +46,26 @@ The SDK writes raw logs directly to your S3 bucket.
   </Tab>
 </Tabs>
 
-## 5. Configure Environment
+## 3. Configure Environment
 
 Create a `.env` file:
 
 ```bash
-# AgentSystems Notary
-AGENTSYSTEMS_NOTARY_API_KEY=sk_asn_test_...
-
 # AWS credentials for your S3 bucket
 ORG_AWS_S3_BUCKET_NAME=acme-corp-raw-ai-logs
 ORG_AWS_S3_ACCESS_KEY_ID=...
 ORG_AWS_S3_SECRET_ACCESS_KEY=...
 ORG_AWS_S3_REGION=us-east-1
 
+# Arweave hash storage
+ARWEAVE_BUNDLER_URL=https://node2.bundlr.network
+ARWEAVE_PRIVATE_KEY_PATH=path/to/rsa-4096-private.pem
+
 # Your LLM provider
 ANTHROPIC_API_KEY=...
 ```
 
-## 6. Integrate the SDK
+## 4. Integrate the SDK
 
 <Tabs>
   <Tab title="LangChain">
@@ -92,7 +77,8 @@ ANTHROPIC_API_KEY=...
     from agentsystems_notary import (
         LangChainNotary,
         RawPayloadStorage,
-        CustodiedHashStorage,
+        ArweaveHashStorage,
+        LocalKeySignerConfig,
         AwsS3StorageConfig,
     )
     from langchain_anthropic import ChatAnthropic
@@ -109,11 +95,14 @@ ANTHROPIC_API_KEY=...
         ),
     )
 
-    # Where hashes are stored for verification
+    # Where hashes are stored — Arweave for independent verification
     hash_storage = [
-        CustodiedHashStorage(
-            api_key=os.environ["AGENTSYSTEMS_NOTARY_API_KEY"],
-            slug="customer-123",
+        ArweaveHashStorage(
+            namespace="my_namespace",
+            signer=LocalKeySignerConfig(
+                private_key_path=os.environ["ARWEAVE_PRIVATE_KEY_PATH"],
+            ),
+            bundler_url=os.environ["ARWEAVE_BUNDLER_URL"],
         ),
     ]
 
@@ -151,7 +140,8 @@ ANTHROPIC_API_KEY=...
     from agentsystems_notary import (
         CrewAINotary,
         RawPayloadStorage,
-        CustodiedHashStorage,
+        ArweaveHashStorage,
+        LocalKeySignerConfig,
         AwsS3StorageConfig,
     )
     from crewai import Agent, Task, Crew, LLM
@@ -168,11 +158,14 @@ ANTHROPIC_API_KEY=...
         ),
     )
 
-    # Where hashes are stored for verification
+    # Where hashes are stored — Arweave for independent verification
     hash_storage = [
-        CustodiedHashStorage(
-            api_key=os.environ["AGENTSYSTEMS_NOTARY_API_KEY"],
-            slug="customer-123",
+        ArweaveHashStorage(
+            namespace="my_namespace",
+            signer=LocalKeySignerConfig(
+                private_key_path=os.environ["ARWEAVE_PRIVATE_KEY_PATH"],
+            ),
+            bundler_url=os.environ["ARWEAVE_BUNDLER_URL"],
         ),
     ]
 
@@ -216,80 +209,75 @@ ANTHROPIC_API_KEY=...
   </Tab>
 </Tabs>
 
-With `debug=True`, you'll see confirmation that the log was written. Check your S3 bucket — there should be a new file under `test/{tenant_id}/{year}/{month}/{day}/`.
+With `debug=True`, you'll see confirmation that the log was written to S3 and the hash was uploaded to Arweave.
 
-Back in the dashboard, you'll see "customer-123" appear in your **Tenants** list (auto-discovered from the slug).
+## 5. Verify
 
-## 7. Generate an Audit Ticket
-
-1. Go to [notary.agentsystems.ai](https://notary.agentsystems.ai)
-2. Click **Tenants** in the navbar (or **View All** from the Tenants card on the Dashboard)
-3. Click **Generate Verification Ticket**
-4. Select your tenant from the dropdown
-5. Select **Test** data type (production requires a paid plan)
-6. Leave the default date range or adjust if needed
-7. Check the confirmation box and click **Download Ticket**
-
-This downloads a signed token that grants access to verify logs for this tenant and date range.
-
-## 8. Export Your Logs
-
-After downloading the ticket, a second modal will show commands to export logs from your S3 bucket. Copy and run the commands from the modal — they'll have your tenant ID pre-filled. Replace `YOUR_BUCKET` with your S3 bucket name.
-
-Requires [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) configured with credentials for your bucket.
-
-## 9. Verify
-
-1. Go to [verify.agentsystems.ai](https://verify.agentsystems.ai)
-2. Upload the audit ticket (`.json` file)
-3. Upload the logs ZIP
-4. Click **Start Verification**
-
-**Results:**
-
-| Result | Meaning |
-|--------|---------|
-| **Verified Records** | Records in the ZIP that match AgentSystems records |
-| **Unrecognized Records** | Records in the ZIP that weren't recorded by AgentSystems |
-| **Missing Records** | Records that AgentSystems recorded but aren't in the ZIP |
-
-After verification, you can download an **attestation packet** — a ZIP containing your logs, the audit ticket, a signed attestation certificate (PDF), and verification instructions. Attestation packets can be generated regardless of the verification outcome.
-
-## Using Arweave (Optional)
-
-For decentralized hash storage on the Arweave blockchain, add `ArweaveHashStorage` to your hash storage list. Arweave requires a signer configuration for transaction signing.
-
-Add these environment variables:
+Anyone can verify your logs using the open-source CLI — no account required:
 
 ```bash
-ARWEAVE_BUNDLER_URL=https://node2.bundlr.network
-ARWEAVE_PRIVATE_KEY_PATH=path/to/rsa-4096-private.pem
+npm install -g agentsystems-verify
 ```
 
-Example using a local RSA-4096 private key:
-
-```python
-from agentsystems_notary import ArweaveHashStorage, LocalKeySignerConfig
-
-hash_storage = [
-    CustodiedHashStorage(
-        api_key=os.environ["AGENTSYSTEMS_NOTARY_API_KEY"],
-        slug="customer-123",
-    ),
-    ArweaveHashStorage(
-        namespace="my_namespace",
-        signer=LocalKeySignerConfig(
-            private_key_path=os.environ["ARWEAVE_PRIVATE_KEY_PATH"],
-        ),
-        bundler_url=os.environ["ARWEAVE_BUNDLER_URL"],
-    ),
-]
+```bash
+agentsystems-verify \
+  --namespace my_namespace \
+  --start 2026-01-01 \
+  --end 2026-01-31 \
+  --logs logs.zip
 ```
 
-Supported signers:
+See [Independent Verification](/notary/verification/arweave) for full CLI documentation.
+
+## Signer Options
+
+The examples above use a local RSA-4096 private key. You can also use managed key services:
+
 - `LocalKeySignerConfig` — Local RSA-4096 private key (PEM file or env var)
 - `AwsKmsSignerConfig` — AWS KMS managed key
 - `GcpKmsSignerConfig` — GCP Cloud KMS managed key
 - `AzureKeyVaultSignerConfig` — Azure Key Vault managed key
 
-See [Independent Verification](/notary/verification/arweave) for verifying Arweave-notarized logs.
+---
+
+## Using Custodied Storage (Optional)
+
+If you prefer AgentSystems to manage hash storage, you can use our custodied option instead of (or in addition to) Arweave.
+
+### Create Account
+
+Go to [notary.agentsystems.ai](https://notary.agentsystems.ai) and sign up.
+
+### Generate an API Key
+
+1. From the Dashboard, click **Add** under API Keys
+2. Name your key and select environment
+3. Copy and save the key — it's only shown once
+
+### Add to Environment
+
+```bash
+AGENTSYSTEMS_NOTARY_API_KEY=sk_asn_test_...
+```
+
+### Add Custodied Hash Storage
+
+```python
+from agentsystems_notary import CustodiedHashStorage
+
+hash_storage = [
+    ArweaveHashStorage(...),  # Keep Arweave for independent verification
+    CustodiedHashStorage(
+        api_key=os.environ["AGENTSYSTEMS_NOTARY_API_KEY"],
+        slug="customer-123",
+    ),
+]
+```
+
+### Verify via Portal
+
+1. Go to [notary.agentsystems.ai](https://notary.agentsystems.ai) → Tenants → Generate Verification Ticket
+2. Export logs from your S3 bucket
+3. Upload both to [verify.agentsystems.ai](https://verify.agentsystems.ai)
+
+See [Verification Guide](/notary/verification/guide) for full portal documentation.
