@@ -33,6 +33,14 @@
             ]
           },
           {
+            "tab": "Configuration",
+            "pages": [
+              "notary/configuration/raw-payload-storage",
+              "notary/configuration/signing",
+              "notary/configuration/hash-storage"
+            ]
+          },
+          {
             "tab": "Verification",
             "pages": [
               "notary/verification/guide",

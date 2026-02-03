@@ -1,0 +1,92 @@
+---
+title: Signers
+description: Configure signing for Arweave hash storage
+---
+
+Signers are used to cryptographically sign data items before uploading to Arweave. All signers use RSA-4096 keys with PSS padding.
+
+## Local Key
+
+For development and testing. Generate a key with:
+
+```bash
+openssl genrsa -out arweave-key.pem 4096
+```
+
+```python
+from agentsystems_notary import LocalKeySignerConfig
+
+# From file path
+signer = LocalKeySignerConfig(
+    private_key_path="/path/to/arweave-key.pem",
+)
+
+# Or from environment variable
+signer = LocalKeySignerConfig(
+    private_key_env_var="ARWEAVE_PRIVATE_KEY",
+)
+```
+
+<Warning>
+Local keys are for development and testing only. Use a cloud key management service in production.
+</Warning>
+
+## AWS KMS
+
+```python
+from agentsystems_notary import AwsKmsSignerConfig
+
+signer = AwsKmsSignerConfig(
+    kms_key_arn="arn:aws:kms:us-east-1:123456789:key/abcd-1234-...",
+    aws_access_key_id="AKIA...",
+    aws_secret_access_key="...",
+    aws_region="us-east-1",  # default
+)
+```
+
+### KMS Key Requirements
+
+Create an asymmetric RSA-4096 key with:
+- Key spec: `RSA_4096`
+- Key usage: `SIGN_VERIFY`
+- Signing algorithm: `RSASSA_PSS_SHA_256`
+
+### Required IAM Permissions
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Action": ["kms:Sign", "kms:GetPublicKey"],
+    "Resource": "arn:aws:kms:us-east-1:123456789:key/abcd-1234-..."
+  }]
+}
+```
+
+## GCP Cloud KMS
+
+<Note>Coming soon</Note>
+
+```python
+from agentsystems_notary import GcpKmsSignerConfig
+
+signer = GcpKmsSignerConfig(
+    key_resource_name="projects/.../locations/.../keyRings/.../cryptoKeys/.../cryptoKeyVersions/...",
+    credentials_path="/path/to/service-account.json",  # optional, uses ADC if not provided
+)
+```
+
+## Azure Key Vault
+
+<Note>Coming soon</Note>
+
+```python
+from agentsystems_notary import AzureKeyVaultSignerConfig
+
+signer = AzureKeyVaultSignerConfig(
+    vault_url="https://acme-vault.vault.azure.net",
+    key_name="arweave-signing-key",
+    key_version="abc123",  # optional, uses latest if not provided
+)
+```
