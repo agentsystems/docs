@@ -1,0 +1,79 @@
+---
+title: Raw Payload Storage
+description: Configure where full audit payloads are stored
+---
+
+Raw payload storage is where the full JSON payload of every LLM interaction is written. This is your storage — you maintain full control.
+
+## AWS S3
+
+```python
+from agentsystems_notary import RawPayloadStorage, AwsS3StorageConfig
+
+raw_payload_storage = RawPayloadStorage(
+    storage=AwsS3StorageConfig(
+        bucket_name="acme-corp-audit-logs",
+        aws_access_key_id="AKIA...",
+        aws_secret_access_key="...",
+        aws_region="us-east-1",  # default
+    ),
+)
+```
+
+### Required IAM Permissions
+
+```json
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Effect": "Allow",
+    "Action": ["s3:PutObject", "s3:GetObject", "s3:ListBucket"],
+    "Resource": [
+      "arn:aws:s3:::acme-corp-audit-logs",
+      "arn:aws:s3:::acme-corp-audit-logs/*"
+    ]
+  }]
+}
+```
+
+## GCP Cloud Storage
+
+<Note>Coming soon</Note>
+
+```python
+from agentsystems_notary import RawPayloadStorage, GcpCloudStorageConfig
+
+raw_payload_storage = RawPayloadStorage(
+    storage=GcpCloudStorageConfig(
+        bucket_name="acme-corp-audit-logs",
+        credentials_path="/path/to/service-account.json",  # optional, uses ADC if not provided
+    ),
+)
+```
+
+## Azure Blob Storage
+
+<Note>Coming soon</Note>
+
+```python
+from agentsystems_notary import RawPayloadStorage, AzureBlobStorageConfig
+
+raw_payload_storage = RawPayloadStorage(
+    storage=AzureBlobStorageConfig(
+        container_url="https://acme.blob.core.windows.net",
+        container_name="audit-logs",
+    ),
+)
+```
+
+## Storage Path Structure
+
+Payloads are stored with the following path structure:
+
+```
+{env}/{namespace}/{YYYY}/{MM}/{DD}/{hash}.json
+```
+
+- `env`: `arweave`, `prod`, or `test`
+- `namespace`: Your tenant identifier
+- `hash`: SHA-256 hash of the canonical payload

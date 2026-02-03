@@ -1,0 +1,91 @@
+---
+title: Hash Storage
+description: Configure where cryptographic hashes are stored
+---
+
+Hash storage is where the SHA-256 hashes of your audit payloads are written. Only hashes and metadata are stored externally — raw data stays in your infrastructure.
+
+You can use one or both options.
+
+## Decentralized (Arweave)
+
+Hashes are written to a public, append-only ledger. Not controlled by any single vendor.
+
+```python
+from agentsystems_notary import ArweaveHashStorage, LocalKeySignerConfig
+
+arweave_storage = ArweaveHashStorage(
+    namespace="tenant_a1b2c3d4",  # anonymous tenant identifier
+    signer=LocalKeySignerConfig(
+        private_key_path="/path/to/arweave-key.pem",
+    ),
+    # bundler_url defaults to ArDrive Turbo
+)
+```
+
+### Parameters
+
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `namespace` | Yes | Anonymous tenant identifier (written to public ledger — do not use company names) |
+| `signer` | Yes | Signing configuration (see [Signers](/notary/configuration/signing)) |
+| `bundler_url` | No | Arweave bundler endpoint (defaults to ArDrive Turbo) |
+
+### Verification
+
+Verify with the open-source CLI — no account required:
+
+```bash
+npm install -g agentsystems-verify
+agentsystems-verify --logs logs.zip
+```
+
+See [Independent Verification](/notary/verification/arweave) for full documentation.
+
+## Custodied (AgentSystems)
+
+Hashes are written to AgentSystems' write-once compliance storage. Provides a vendor relationship for enterprise compliance and procurement.
+
+```python
+from agentsystems_notary import CustodiedHashStorage
+
+custodied_storage = CustodiedHashStorage(
+    api_key="sk_asn_prod_...",
+    slug="customer-123",
+)
+```
+
+### Parameters
+
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| `api_key` | Yes | AgentSystems API key (`sk_asn_test_*` or `sk_asn_prod_*`) |
+| `slug` | Yes | Tenant slug (human-readable identifier) |
+| `api_url` | No | API endpoint (defaults to production) |
+
+### Get an API Key
+
+1. Sign up at [notary.agentsystems.ai](https://notary.agentsystems.ai)
+2. From the Dashboard, click **Add** under API Keys
+3. Name your key and select environment
+4. Copy and save the key — it's only shown once
+
+### Verification
+
+Verify via the [Verify UI](https://verify.agentsystems.ai) or see [Verification Guide](/notary/verification/guide).
+
+## Using Both
+
+You can write hashes to both Arweave and custodied storage:
+
+```python
+notary = LangChainNotary(
+    raw_payload_storage=raw_payload_storage,
+    hash_storage=[
+        ArweaveHashStorage(...),
+        CustodiedHashStorage(...),
+    ],
+)
+```
+
+This provides independent verification via Arweave plus a vendor relationship via AgentSystems.
